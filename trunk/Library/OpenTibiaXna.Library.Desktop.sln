@@ -3,18 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTibiaXna.Library.Desktop", "Desktop\OpenTibiaXna.Library.Desktop.csproj", "{65A49D29-F4DA-46E6-9039-98F2F71F3E49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTibiaXna.Library.Desktop.Tests", "OpenTibiaXna.Library.Desktop.Tests\OpenTibiaXna.Library.Desktop.Tests.csproj", "{13963ACC-97CC-46D9-9C69-09C6AACE58AD}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{43B79618-4B0B-42C8-8C62-14647027BD52}"
 	ProjectSection(SolutionItems) = preProject
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
 		OpenTibiaXna.Library.Desktop.vsmdi = OpenTibiaXna.Library.Desktop.vsmdi
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTibiaXna.Library.Desktop.Tests", "Desktop\OpenTibiaXna.Library.Desktop.Tests\OpenTibiaXna.Library.Desktop.Tests.csproj", "{13963ACC-97CC-46D9-9C69-09C6AACE58AD}"
+EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = OpenTibiaXna.Library.Desktop.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

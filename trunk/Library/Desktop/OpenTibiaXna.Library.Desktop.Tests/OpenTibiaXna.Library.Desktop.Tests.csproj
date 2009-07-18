@@ -45,7 +45,7 @@
     <Content Include="AuthoringTests.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Desktop\OpenTibiaXna.Library.Desktop.csproj">
+    <ProjectReference Include="..\OpenTibiaXna.Library.Desktop.csproj">
       <Project>{65A49D29-F4DA-46E6-9039-98F2F71F3E49}</Project>
       <Name>OpenTibiaXna.Library.Desktop</Name>
     </ProjectReference>
