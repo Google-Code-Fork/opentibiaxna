@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace OpenTibiaXna.Server.GUI
+namespace OpenTibiaXna.OTServer.GUI
 {
     static class Program
     {
