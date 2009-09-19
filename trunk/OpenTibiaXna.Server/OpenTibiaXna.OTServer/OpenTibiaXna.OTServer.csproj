@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3576564E-718F-4830-AB57-E3CFBB07D96D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OpenTibiaXna.OTServer</RootNamespace>
+    <AssemblyName>OpenTibiaXna.OTServer</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="LuaInterface, Version=2.0.0.16708, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dependencies\LuaInterface.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.Entity">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dependencies\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=2.0.38.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dependencies\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccountEngine.cs" />
+    <Compile Include="Entities\MapItem.cs" />
+    <Compile Include="Entities\MSSQLEntities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MSSQLEntities.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\Player.cs" />
+    <Compile Include="Objects\Channel.cs" />
+    <Compile Include="Objects\CharacterListItem.cs" />
+    <Compile Include="Objects\Connection.cs" />
+    <Compile Include="Creature.cs" />
+    <Compile Include="Database.cs" />
+    <Compile Include="DatabaseEngine.cs" />
+    <Compile Include="DatItem.cs" />
+    <Compile Include="DatReader.cs" />
+    <Compile Include="Entities\Account.cs" />
+    <Compile Include="Entities\GameWorld.cs" />
+    <Compile Include="Entities\GenericDatabase.cs" />
+    <Compile Include="Entities\LiteSQLEntities.Designer.cs">
+      <DependentUpon>LiteSQLEntities.edmx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Entities\MapTile.cs" />
+    <Compile Include="Entities\MySQLEntities.Designer.cs">
+      <DependentUpon>MySQLEntities.edmx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Objects\PlayerObject.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="GameWorldEngine.cs" />
+    <Compile Include="Helpers\BigInteger.cs" />
+    <Compile Include="Helpers\Checksum\AdlerChecksum.cs" />
+    <Compile Include="Helpers\Cryptography\Rsa.cs" />
+    <Compile Include="Helpers\Cryptography\Xtea.cs" />
+    <Compile Include="Helpers\Enums\DatabaseTypes.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="Helpers\Hash.cs" />
+    <Compile Include="Helpers\ServerSettings\Settings.Designer.cs">
+      <DependentUpon>Settings.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Helpers\ServerSettings\SettingsManager.cs" />
+    <Compile Include="Items\Container.cs" />
+    <Compile Include="Items\ItemObject.cs" />
+    <Compile Include="Items\Weapon.cs" />
+    <Compile Include="Location.cs" />
+    <Compile Include="Map.cs" />
+    <Compile Include="MapEngine.cs" />
+    <Compile Include="Outfit.cs" />
+    <Compile Include="Packets\Client\AccountPacket.cs" />
+    <Compile Include="Packets\Client\ChangeOutfitPacket.cs" />
+    <Compile Include="Packets\Client\ChannelClosePacket.cs" />
+    <Compile Include="Packets\Client\ClientChannelOpenPacket.cs" />
+    <Compile Include="Packets\Client\FightModesPacket.cs" />
+    <Compile Include="Packets\Client\LoginPacket.cs" />
+    <Compile Include="Packets\Client\LookAtPacket.cs" />
+    <Compile Include="Packets\Client\PlayerSpeechPacket.cs" />
+    <Compile Include="Packets\Client\PrivateChannelOpenPacket.cs" />
+    <Compile Include="Packets\Client\VipAddPacket.cs" />
+    <Compile Include="Packets\Client\VipRemovePacket.cs" />
+    <Compile Include="Packets\NetworkMessage.cs" />
+    <Compile Include="Packets\Packet.cs" />
+    <Compile Include="Packets\Server\ChannelListPacket.cs" />
+    <Compile Include="Packets\Server\ChannelOpenPacket.cs" />
+    <Compile Include="Packets\Server\ChannelOpenPrivatePacket.cs" />
+    <Compile Include="Packets\Server\CharacterListPacket.cs" />
+    <Compile Include="Packets\Server\CreatureChangeOutfitPacket.cs" />
+    <Compile Include="Packets\Server\CreatureHealthPacket.cs" />
+    <Compile Include="Packets\Server\CreatureLightPacket.cs" />
+    <Compile Include="Packets\Server\CreatureMovePacket.cs" />
+    <Compile Include="Packets\Server\CreatureSpeechPacket.cs" />
+    <Compile Include="Packets\Server\CreatureTurnPacket.cs" />
+    <Compile Include="Packets\Server\EffectPacket.cs" />
+    <Compile Include="Packets\Server\GameServerConnectPacket.cs" />
+    <Compile Include="Packets\Server\MapDescriptionPacket.cs" />
+    <Compile Include="Packets\Server\MapFloorChangeDownPacket.cs" />
+    <Compile Include="Packets\Server\MapFloorChangeUpPacket.cs" />
+    <Compile Include="Packets\Server\MapPacket.cs" />
+    <Compile Include="Packets\Server\MapSlicePacket.cs" />
+    <Compile Include="Packets\Server\MessageOfTheDayPacket.cs" />
+    <Compile Include="Packets\Server\OutfitWindowPacket.cs" />
+    <Compile Include="Packets\Server\PlayerStatusPacket.cs" />
+    <Compile Include="Packets\Server\PlayerWalkCancelPacket.cs" />
+    <Compile Include="Packets\Server\SelfAppearPacket.cs" />
+    <Compile Include="Packets\Server\TextMessagePacket.cs" />
+    <Compile Include="Packets\Server\TileAddCreaturePacket.cs" />
+    <Compile Include="Packets\Server\TileRemoveThingPacket.cs" />
+    <Compile Include="Packets\Server\VipLoginPacket.cs" />
+    <Compile Include="Packets\Server\VipLogoutPacket.cs" />
+    <Compile Include="Packets\Server\VipStatePacket.cs" />
+    <Compile Include="Packets\Server\WorldLightPacket.cs" />
+    <Compile Include="PlayerEngine.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="LuaScripter\Script.cs" />
+    <Compile Include="LuaScripter\Scripter.cs" />
+    <Compile Include="Scripting\IScript.cs" />
+    <Compile Include="Scripting\ScriptManager.cs" />
+    <Compile Include="ServerObject.cs" />
+    <Compile Include="Speech.cs" />
+    <Compile Include="Thing.cs" />
+    <Compile Include="Tile.cs" />
+    <Compile Include="Vip.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Entities\MySQLEntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>MySQLEntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Entities\LiteSQLEntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>LiteSQLEntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Helpers\ServerSettings\Settings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Entities\MSSQLEntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>MSSQLEntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Entities\Schemas\MSSQL.schema.sql" />
+    <None Include="Entities\Schemas\MySQL.schema.sql" />
+    <None Include="Entities\Schemas\SQLite.schema.sql" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
