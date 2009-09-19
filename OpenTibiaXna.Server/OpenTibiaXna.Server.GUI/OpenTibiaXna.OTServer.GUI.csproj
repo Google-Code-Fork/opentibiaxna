@@ -8,7 +8,7 @@
     <ProjectGuid>{D570D610-DAB0-4719-A577-38CAC1145DCD}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenTibiaXna.Server.GUI</RootNamespace>
+    <RootNamespace>OpenTibiaXna.OTServer.GUI</RootNamespace>
     <AssemblyName>OpenTibiaXna.Server.GUI</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -67,6 +67,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -79,9 +80,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OpenTibiaXna.Server.Engines\OpenTibiaXna.Server.Engines.csproj">
-      <Project>{54870789-5B5C-4F5C-89FD-6349DC837E7E}</Project>
-      <Name>OpenTibiaXna.Server.Engines</Name>
+    <ProjectReference Include="..\OpenTibiaXna.OTServer\OpenTibiaXna.OTServer.csproj">
+      <Project>{3576564E-718F-4830-AB57-E3CFBB07D96D}</Project>
+      <Name>OpenTibiaXna.OTServer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

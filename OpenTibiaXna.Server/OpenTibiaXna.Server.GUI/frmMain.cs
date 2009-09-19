@@ -6,8 +6,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using OpenTibiaXna.OTServer.Engines;
 
-namespace OpenTibiaXna.Server.GUI
+namespace OpenTibiaXna.OTServer.GUI
 {
     public partial class frmMain : Form
     {
@@ -18,7 +19,7 @@ namespace OpenTibiaXna.Server.GUI
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            SharpOT.Server server = new SharpOT.Server();
+            ServerObject server = new ServerObject();
             server.Run();
         }
     }

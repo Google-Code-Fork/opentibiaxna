@@ -1,4 +1,4 @@
-﻿namespace OpenTibiaXna.Server.GUI
+﻿namespace OpenTibiaXna.OTServer.GUI
 {
     partial class frmMain
     {
