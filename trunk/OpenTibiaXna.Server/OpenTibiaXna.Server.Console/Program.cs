@@ -10,8 +10,7 @@ namespace OpenTibiaXna.OTServer.Console
     {
         static void Main(string[] args)
         {
-            ServerObject server = new ServerObject();
-            server.Run();
+            new ServerEngine().Run();
         }
     }
 }

@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenTibiaXna.OTServer.Engines;
+using OpenTibiaXna.OTServer.Objects;
 
 namespace OpenTibiaXna.OTServer.Packets.Client
 {
-    public class ChangeOutfitPacket : Packet
+    public class ChangeOutfitPacket : PacketObject
     {
-        public Outfit Outfit { get; set; }
+        public OutfitObject Outfit { get; set; }
 
-        public static ChangeOutfitPacket Parse(NetworkMessage message)
+        public static ChangeOutfitPacket Parse(NetworkMessageEngine message)
         {
             ChangeOutfitPacket packet = new ChangeOutfitPacket();
 

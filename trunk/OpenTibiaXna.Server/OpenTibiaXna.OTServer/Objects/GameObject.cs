@@ -12,50 +12,50 @@ using OpenTibiaXna.OTServer.Engines;
 using OpenTibiaXna.OTServer.Objects;
 using OpenTibiaXna.OTServer.LuaScripter;
 
-namespace OpenTibiaXna.OTServer
+namespace OpenTibiaXna.OTServer.Objects
 {
-    public class Game
+    public class GameObject
     {
         #region Variables
         
-        private Dictionary<uint, Creature> creatures = new Dictionary<uint, Creature>();
+        private Dictionary<uint, CreatureObject> creatures = new Dictionary<uint, CreatureObject>();
         Random random = new Random();
 
         #endregion
 
         #region Properties
 
-        public Map Map { get; private set; }
+        public MapObject Map { get; private set; }
         public Scripter Scripter { get; private set; }
 
         #endregion
 
         #region Events
 
-        public delegate bool BeforeCreatureSpeechHandler(Creature creature, Speech speech);
+        public delegate bool BeforeCreatureSpeechHandler(CreatureObject creature, SpeechObject speech);
         public BeforeCreatureSpeechHandler BeforeCreatureSpeech;
 
-        public delegate void AfterCreatureDefaultSpeechHandler(Creature creature, SpeechType speechType, string message);
+        public delegate void AfterCreatureDefaultSpeechHandler(CreatureObject creature, SpeechType speechType, string message);
         public AfterCreatureDefaultSpeechHandler AfterCreatureWhisperSpeech;
         public AfterCreatureDefaultSpeechHandler AfterCreatureSaySpeech;
         public AfterCreatureDefaultSpeechHandler AfterCreatureYellSpeech;
 
-        public delegate void AfterCreaturePrivateSpeechHandler(Creature creature, string receiver, string message);
+        public delegate void AfterCreaturePrivateSpeechHandler(CreatureObject creature, string receiver, string message);
         public AfterCreaturePrivateSpeechHandler AfterCreaturePrivateSpeech;
 
         public delegate void AfterCreatureChannelSpeechHandler(string sender, SpeechType type, ChatChannel channelId, string message);
         public AfterCreatureChannelSpeechHandler AfterCreatureChannelSpeech;
 
-        public delegate bool BeforeCreatureTurnHandler(Creature creature, Direction direction);
+        public delegate bool BeforeCreatureTurnHandler(CreatureObject creature, Direction direction);
         public BeforeCreatureTurnHandler BeforeCreatureTurn;
 
-        public delegate bool AfterCreatureTurnHandler(Creature creature, Direction direction);
+        public delegate bool AfterCreatureTurnHandler(CreatureObject creature, Direction direction);
         public AfterCreatureTurnHandler AfterCreatureTurn;
 
-        public delegate bool BeforePlayerChangeOutfitHandler(Creature creature, Outfit outfit);
+        public delegate bool BeforePlayerChangeOutfitHandler(CreatureObject creature, OutfitObject outfit);
         public BeforePlayerChangeOutfitHandler BeforePlayerChangeOutfit;
 
-        public delegate bool AfterPlayerChangeOutfitHandler(Creature creature, Outfit outfit);
+        public delegate bool AfterPlayerChangeOutfitHandler(CreatureObject creature, OutfitObject outfit);
         public AfterPlayerChangeOutfitHandler AfterPlayerChangeOutfit;
 
         public delegate bool BeforePrivateChannelOpenHandler(PlayerObject player, string receiver);
@@ -64,10 +64,10 @@ namespace OpenTibiaXna.OTServer
         public delegate bool AfterPrivateChannelOpenHandler(PlayerObject player, string receiver);
         public AfterPrivateChannelOpenHandler AfterPrivateChannelOpen;
 
-        public delegate bool BeforeCreatureMoveHandler(Creature creature, Direction direction, Location fromLocation, Location toLocation, byte fromStackPosition, Tile toTile);
+        public delegate bool BeforeCreatureMoveHandler(CreatureObject creature, Direction direction, LocationEngine fromLocation, LocationEngine toLocation, byte fromStackPosition, TileObject toTile);
         public BeforeCreatureMoveHandler BeforeCreatureMove;
 
-        public delegate bool AfterCreatureMoveHandler(Creature creature, Direction direction, Location fromLocation, Location toLocation, byte fromStackPosition, Tile toTile);
+        public delegate bool AfterCreatureMoveHandler(CreatureObject creature, Direction direction, LocationEngine fromLocation, LocationEngine toLocation, byte fromStackPosition, TileObject toTile);
         public AfterCreatureMoveHandler AfterCreatureMove;
 
         public delegate bool ChannelHandler(PlayerObject creature, ChatChannel channel);
@@ -77,10 +77,10 @@ namespace OpenTibiaXna.OTServer
         public delegate void AfterChannelOpenHandler(PlayerObject creature, ChatChannel channel);
         public AfterChannelOpenHandler AfterChannelOpen;
 
-        public delegate bool BeforeCreatureUpdateHealthHandler(Creature creature, ushort health);
+        public delegate bool BeforeCreatureUpdateHealthHandler(CreatureObject creature, ushort health);
         public BeforeCreatureUpdateHealthHandler BeforeCreatureUpdateHealth;
 
-        public delegate void AfterCreatureUpdateHealthHandler(Creature creature, ushort health);
+        public delegate void AfterCreatureUpdateHealthHandler(CreatureObject creature, ushort health);
         public AfterCreatureUpdateHealthHandler AfterCreatureUpdateHealth;
 
         public delegate bool BeforeVipAddHandler(PlayerObject player, string vipName);
@@ -110,7 +110,7 @@ namespace OpenTibiaXna.OTServer
         public delegate bool AfterWalkCancelHandler();
         public AfterWalkCancelHandler AfterWalkCancel;
 
-        public delegate void AddRemoveCreatureHandler(Creature creature);
+        public delegate void AddRemoveCreatureHandler(CreatureObject creature);
         public AddRemoveCreatureHandler AfterAddCreature;
         public AddRemoveCreatureHandler AfterRemoveCreature;
 
@@ -118,9 +118,9 @@ namespace OpenTibiaXna.OTServer
 
         #region Constructor
 
-        public Game(ServerObject server)
+        public GameObject()
         {
-            Map = new Map();
+            Map = new MapObject();
             Scripter = new Scripter();
         }
 
@@ -128,26 +128,26 @@ namespace OpenTibiaXna.OTServer
 
         #region Public Helpers
 
-        public void AddCreature(Creature creature)
+        public void AddCreature(CreatureObject creature)
         {
             creatures.Add(creature.Id, creature);
             if (AfterAddCreature != null)
                 AfterAddCreature(creature);
         }
 
-        public void RemoveCreature(Creature creature)
+        public void RemoveCreature(CreatureObject creature)
         {
             creatures.Remove(creature.Id);
             if (AfterRemoveCreature != null)
                 AfterRemoveCreature(creature);
         }
 
-        public IEnumerable<Creature> GetSpectators(Location location)
+        public IEnumerable<CreatureObject> GetSpectators(LocationEngine location)
         {
             return creatures.Values.Where(creature => creature.Tile.Location.CanSee(location));
         }
 
-        public IEnumerable<PlayerObject> GetSpectatorPlayers(Location location)
+        public IEnumerable<PlayerObject> GetSpectatorPlayers(LocationEngine location)
         {
             return GetPlayers().Where(player => player.Tile.Location.CanSee(location));
         }
@@ -178,7 +178,7 @@ namespace OpenTibiaXna.OTServer
                 AfterWalkCancel();
         }
 
-        public void CreatureTurn(Creature creature, Direction direction)
+        public void CreatureTurn(CreatureObject creature, Direction direction)
         {
             if (BeforeCreatureTurn != null)
             {
@@ -203,7 +203,7 @@ namespace OpenTibiaXna.OTServer
                 AfterCreatureTurn(creature, direction);
         }
 
-        public void PlayerChangeOutfit(PlayerObject player, Outfit outfit)
+        public void PlayerChangeOutfit(PlayerObject player, OutfitObject outfit)
         {
             if (BeforePlayerChangeOutfit != null)
             {
@@ -252,7 +252,7 @@ namespace OpenTibiaXna.OTServer
             }
         }
 
-        public void CreatureSpeech(Creature creature, Speech speech)
+        public void CreatureSpeech(CreatureObject creature, SpeechObject speech)
         {
             if (BeforeCreatureSpeech != null)
             {
@@ -331,12 +331,12 @@ namespace OpenTibiaXna.OTServer
             }
         }
 
-        public void CreatureMove(Creature creature, Direction direction)
+        public void CreatureMove(CreatureObject creature, Direction direction)
         {
-            Location fromLocation = creature.Tile.Location;
+            LocationEngine fromLocation = creature.Tile.Location;
             byte fromStackPosition = creature.Tile.GetStackPosition(creature);
-            Location toLocation = creature.Tile.Location.Offset(direction);
-            Tile toTile = Map.GetTile(toLocation);
+            LocationEngine toLocation = creature.Tile.Location.Offset(direction);
+            TileObject toTile = Map.GetTile(toLocation);
 
             if (BeforeCreatureMove != null)
             {
@@ -390,7 +390,7 @@ namespace OpenTibiaXna.OTServer
             }
         }
 
-        public void CreatureUpdateHealth(Creature creature, ushort health)
+        public void CreatureUpdateHealth(CreatureObject creature, ushort health)
         {
             if (BeforeCreatureUpdateHealth != null)
             {
@@ -444,7 +444,7 @@ namespace OpenTibiaXna.OTServer
             else if (selected.Key != 0)
             {
                 bool state = GetPlayers().Any(p => p.Id == selected.Key);
-                player.VipList.Add(selected.Key, new Vip
+                player.VipList.Add(selected.Key, new VipObject
                 {
                     Id = selected.Key,
                     Name = selected.Value,
@@ -495,10 +495,10 @@ namespace OpenTibiaXna.OTServer
             Player player = PlayerEngine.GetPlayerBy(int.Parse(connection.AccountId.ToString()), characterName);
             if (player.PlayerObject.SavedLocation == null || Map.GetTile(player.PlayerObject.SavedLocation) == null)
             {
-                player.PlayerObject.SavedLocation = new Location(97, 205, 7);
+                player.PlayerObject.SavedLocation = new LocationEngine(97, 205, 7);
             }
             //player.Id = 0x01000000 + (uint)random.Next(0xFFFFFF);
-            Tile tile = Map.GetTile(player.PlayerObject.SavedLocation);
+            TileObject tile = Map.GetTile(player.PlayerObject.SavedLocation);
             player.PlayerObject.Tile = tile;
             tile.Creatures.Add(player.PlayerObject);
             connection.Player = player.PlayerObject;
@@ -547,12 +547,12 @@ namespace OpenTibiaXna.OTServer
             Database.SavePlayerById(player);
         }
 
-        public void PlayerLookAt(PlayerObject player, ushort id, Location location, byte stackPosition)
+        public void PlayerLookAt(PlayerObject player, ushort id, LocationEngine location, byte stackPosition)
         {
             if (player.Tile.Location.CanSee(location))
             {
-                Tile tile = Map.GetTile(location);
-                Thing thing = tile.GetThingAtStackPosition(stackPosition);
+                TileObject tile = Map.GetTile(location);
+                ThingObject thing = tile.GetThingAtStackPosition(stackPosition);
                 player.Connection.SendTextMessage(TextMessageType.DescriptionGreen, thing.GetLookAtString());
             }
         }
@@ -632,7 +632,7 @@ namespace OpenTibiaXna.OTServer
                 AfterCreatureChannelSpeech(sender, type, channelId, message);
         }
 
-        private void CreatureSaySpeech(Creature creature, SpeechType speechType, string message)
+        private void CreatureSaySpeech(CreatureObject creature, SpeechType speechType, string message)
         {
             foreach (PlayerObject spectator in GetSpectatorPlayers(creature.Tile.Location))
             {
@@ -643,7 +643,7 @@ namespace OpenTibiaXna.OTServer
                 AfterCreatureSaySpeech(creature, speechType, message);
         }
 
-        private void CreatureYellSpeech(Creature creature, SpeechType speechType, string message)
+        private void CreatureYellSpeech(CreatureObject creature, SpeechType speechType, string message)
         {
             if (creature.IsPlayer)
             {
@@ -666,7 +666,7 @@ namespace OpenTibiaXna.OTServer
                 AfterCreatureYellSpeech(creature, speechType, message);
         }
 
-        private void CreatureWhisperSpeech(Creature creature, SpeechType speechType, string message)
+        private void CreatureWhisperSpeech(CreatureObject creature, SpeechType speechType, string message)
         {
             foreach (PlayerObject spectator in GetSpectatorPlayers(creature.Tile.Location))
             {
@@ -684,7 +684,7 @@ namespace OpenTibiaXna.OTServer
                 AfterCreatureWhisperSpeech(creature, speechType, message);
         }
 
-        private void CreaturePrivateSpeech(Creature creature, string receiver, string message)
+        private void CreaturePrivateSpeech(CreatureObject creature, string receiver, string message)
         {
             PlayerObject selected = GetPlayers().FirstOrDefault(p => p.Name == receiver);
             if (selected != null)

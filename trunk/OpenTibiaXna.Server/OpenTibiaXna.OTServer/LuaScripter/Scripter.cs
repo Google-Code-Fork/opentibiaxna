@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenTibiaXna.OTServer.Objects;
 
 namespace OpenTibiaXna.OTServer.LuaScripter
 {
@@ -28,7 +29,7 @@ namespace OpenTibiaXna.OTServer.LuaScripter
             //More test to come
         }
         
-        public bool RaiseEvent(EventType eventType, EventProperties eventProperties, Creature cid, object[] eventArgs)
+        public bool RaiseEvent(EventType eventType, EventProperties eventProperties, CreatureObject cid, object[] eventArgs)
         {
             foreach (Script script in scripts)
             {

@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System;
 using OpenTibiaXna.OTServer.Entities;
 using OpenTibiaXna.OTServer.Objects;
+using OpenTibiaXna.OTServer.Engines;
 
 public class AccountCreator:IScript
 {
-    Game game;
+    GameObject game;
     Dictionary<Connection, CreationInfo> creators = new Dictionary<Connection, CreationInfo>();
-    public bool Start(Game game)
+    public bool Start(GameObject game)
     {
         this.game = game;
         game.BeforeCreatureSpeech += BeforeCreatureSpeech;
@@ -33,7 +34,7 @@ public class AccountCreator:IScript
         if (creators.ContainsKey(player.Connection)) creators.Remove(player.Connection);
     }
 
-    public bool BeforeCreatureSpeech(Creature creature, Speech speech)
+    public bool BeforeCreatureSpeech(CreatureObject creature, SpeechObject speech)
     {
         if (creature.IsPlayer && creature.Name == "Account Creator")
         {
@@ -51,7 +52,7 @@ public class AccountCreator:IScript
 
     }
 
-    public bool BeforeCreatureMove(Creature creature, Direction direction, Location fromLocation, Location toLocation, byte fromStackPosition, Tile toTile)
+    public bool BeforeCreatureMove(CreatureObject creature, Direction direction, LocationEngine fromLocation, LocationEngine toLocation, byte fromStackPosition, TileObject toTile)
     {
         if (creature.IsPlayer && creature.Name == "Account Creator")
         {
@@ -61,7 +62,7 @@ public class AccountCreator:IScript
         return true;
     }
 
-    private void Parse(Connection connection,DialogueState state, Speech speech)
+    private void Parse(Connection connection,DialogueState state, SpeechObject speech)
     {
         switch (state)
         {

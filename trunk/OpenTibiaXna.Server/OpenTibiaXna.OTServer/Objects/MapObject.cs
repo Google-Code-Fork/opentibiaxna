@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Data.SQLite;
-using OpenTibiaXna.OTServer.Engines;
 using OpenTibiaXna.OTServer.Items;
+using OpenTibiaXna.OTServer.Engines;
 
-namespace OpenTibiaXna.OTServer
+namespace OpenTibiaXna.OTServer.Objects
 {
-    public class Map
+    public class MapObject
     {
         public const int Size = 1024;
 
-        Tile[,,] tiles = new Tile[Size, Size, 14];
+        TileObject[, ,] tiles = new TileObject[Size, Size, 14];
 
         private void FillTiles(ushort id)
         {
@@ -20,12 +19,12 @@ namespace OpenTibiaXna.OTServer
             {
                 for (int y = 0; y < Size; y++)
                 {
-                    Tile tile = new Tile();
+                    TileObject tile = new TileObject();
 
                     ItemObject ground = new ItemObject(id);
                     tile.Ground = ground;
 
-                    tile.Location = new Location(x, y, 7);
+                    tile.Location = new LocationEngine(x, y, 7);
 
                     tiles[x, y, 7] = tile;
                 }
@@ -39,7 +38,7 @@ namespace OpenTibiaXna.OTServer
             MapEngine.GetMapItems(this);
         }
 
-        public Tile GetTile(Location location)
+        public TileObject GetTile(LocationEngine location)
         {
             return GetTile(
                 location.X,
@@ -48,9 +47,9 @@ namespace OpenTibiaXna.OTServer
             );
         }
 
-        public Tile GetTile(int x, int y, int z)
+        public TileObject GetTile(int x, int y, int z)
         {
-            if (x < 0 || x >= Size || 
+            if (x < 0 || x >= Size ||
                 y < 0 || y >= Size ||
                 z < 0 || z >= 14)
             {
@@ -60,7 +59,7 @@ namespace OpenTibiaXna.OTServer
             return tiles[x, y, z];
         }
 
-        public bool SetTile(Location location, Tile tile)
+        public bool SetTile(LocationEngine location, TileObject tile)
         {
             if (location.X < 0 || location.X >= Size ||
                 location.Y < 0 || location.Y >= Size ||

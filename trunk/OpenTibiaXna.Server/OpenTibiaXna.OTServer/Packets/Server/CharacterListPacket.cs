@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using OpenTibiaXna.OTServer.Entities;
 using OpenTibiaXna.OTServer.Objects;
+using OpenTibiaXna.OTServer.Engines;
 
 namespace OpenTibiaXna.OTServer.Packets.Server
 {
-    public class CharacterListPacket : Packet
+    public class CharacterListPacket : PacketObject
     {
-        public static void Add(NetworkMessage message, IEnumerable<CharacterListItem> characters, ushort premiumDaysLeft)
+        public static void Add(NetworkMessageEngine message, IEnumerable<CharacterListItem> characters, ushort premiumDaysLeft)
         {
             message.AddByte((byte)ServerPacketType.CharacterList);
 
@@ -26,7 +27,7 @@ namespace OpenTibiaXna.OTServer.Packets.Server
             message.AddUInt16(premiumDaysLeft);
         }
 
-        public CharacterListPacket Parse(NetworkMessage message)
+        public CharacterListPacket Parse(NetworkMessageEngine message)
         {
             return new CharacterListPacket();
         }

@@ -2,20 +2,22 @@
 using System.Linq;
 using System.Collections.Generic;
 using OpenTibiaXna.OTServer.Items;
+using OpenTibiaXna.OTServer.Objects;
+using OpenTibiaXna.OTServer.Engines;
 
-namespace OpenTibiaXna.OTServer
+namespace OpenTibiaXna.OTServer.Objects
 {
-    public class Tile
+    public class TileObject
     {
-        public Location Location { get; set; }
+        public LocationEngine Location { get; set; }
         public ItemObject Ground { get; set; }
         public List<ItemObject> Items { get; set; }
-        public List<Creature> Creatures { get; set; }
+        public List<CreatureObject> Creatures { get; set; }
 
-        public Tile()
+        public TileObject()
         {
             Items = new List<ItemObject>();
-            Creatures = new List<Creature>();
+            Creatures = new List<CreatureObject>();
             IsWalkable = true;
         }
 
@@ -31,7 +33,7 @@ namespace OpenTibiaXna.OTServer
             return Items.Where(i => i.GetOrder() > 4);
         }
 
-        public Thing GetThingAtStackPosition(byte stackPosition)
+        public ThingObject GetThingAtStackPosition(byte stackPosition)
         {
             int n = -1;
 
@@ -58,7 +60,7 @@ namespace OpenTibiaXna.OTServer
 
             if (Creatures.Count > 0)
             {
-                foreach (Creature creature in Creatures)
+                foreach (CreatureObject creature in Creatures)
                 {
                     ++n;
                     if (stackPosition == n)
@@ -83,7 +85,7 @@ namespace OpenTibiaXna.OTServer
             return null;
         }
 
-        public byte GetStackPosition(Thing thing)
+        public byte GetStackPosition(ThingObject thing)
         {
             int n = -1;
 
@@ -105,7 +107,7 @@ namespace OpenTibiaXna.OTServer
 
             if (Creatures.Count > 0)
             {
-                foreach (Creature creature in Creatures)
+                foreach (CreatureObject creature in Creatures)
                 {
                     ++n;
                     if (thing == creature)

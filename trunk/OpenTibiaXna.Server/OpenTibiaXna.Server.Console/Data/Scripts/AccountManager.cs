@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System;
 using OpenTibiaXna.OTServer.Entities;
 using OpenTibiaXna.OTServer.Objects;
+using OpenTibiaXna.OTServer.Engines;
 
 public class AccountManager : IScript
 {
-    Game game;
+    GameObject game;
     Dictionary<Connection, ManagementInfo> managers = new Dictionary<Connection, ManagementInfo>();
     string vocationsText;
-    public bool Start(Game game)
+    public bool Start(GameObject game)
     {
         this.game = game;
         vocationsText = "What would you like it to be? The available vocations are:";
@@ -42,7 +43,7 @@ public class AccountManager : IScript
         if (managers.ContainsKey(player.Connection)) managers.Remove(player.Connection);
     }
 
-    public bool BeforeCreatureSpeech(Creature creature, Speech speech)
+    public bool BeforeCreatureSpeech(CreatureObject creature, SpeechObject speech)
     {
         if (creature.IsPlayer && creature.Name.Contains("Account Manager"))
         {
@@ -60,7 +61,7 @@ public class AccountManager : IScript
 
     }
 
-    public bool BeforeCreatureMove(Creature creature, Direction direction, Location fromLocation, Location toLocation, byte fromStackPosition, Tile toTile)
+    public bool BeforeCreatureMove(CreatureObject creature, Direction direction, LocationEngine fromLocation, LocationEngine toLocation, byte fromStackPosition, TileObject toTile)
     {
         if (creature.IsPlayer && creature.Name.Contains("Account Manager"))
         {
@@ -70,7 +71,7 @@ public class AccountManager : IScript
         return true;
     }
 
-    private void Parse(Connection connection, DialogueState state, Speech speech)
+    private void Parse(Connection connection, DialogueState state, SpeechObject speech)
     {
         switch (state)
         {
@@ -199,12 +200,12 @@ public class AccountManager : IScript
                     p.Gender = managers[connection].CharacterGender;
                     p.Vocation = managers[connection].CharacterVocation;
                     p.Id=game.GenerateAvailableId();
-                    p.Tile = new Tile();
-                    p.Tile.Location = new Location(97, 205, 7);//"temple position"
+                    p.Tile = new TileObject();
+                    p.Tile.Location = new LocationEngine(97, 205, 7);//"temple position"
                     if (p.Gender == Gender.Male)
-                        p.Outfit = new Outfit(128, 0);
+                        p.Outfit = new OutfitObject(128, 0);
                     else
-                        p.Outfit = new Outfit(136, 0);
+                        p.Outfit = new OutfitObject(136, 0);
                     Database.CreatePlayer(connection.AccountId, p.Name, p.Id);
                     Database.SavePlayerById(p);
                     connection.SendTextMessage(TextMessageType.ConsoleBlue, "Your character has been created sucessfully.You can now relog to access it.");

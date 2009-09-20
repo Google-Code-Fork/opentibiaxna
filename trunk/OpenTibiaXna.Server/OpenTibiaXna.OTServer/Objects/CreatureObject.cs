@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using OpenTibiaXna.OTServer.Objects;
 
-namespace OpenTibiaXna.OTServer
+namespace OpenTibiaXna.OTServer.Objects
 {
-    public class Creature : Thing
+    public class CreatureObject : ThingObject
     {
         #region Private Variables
 
@@ -12,7 +13,7 @@ namespace OpenTibiaXna.OTServer
 
         #region Constructor
 
-        public Creature()
+        public CreatureObject()
         {
             Health = 100;
             MaxHealth = 100;
@@ -20,7 +21,7 @@ namespace OpenTibiaXna.OTServer
             MaxMana = 100;
             Health = 100;
             MaxHealth = 100;
-            Outfit = new Outfit(128, 0);
+            Outfit = new OutfitObject(128, 0);
             Direction = Direction.North;
             LightLevel = 0;
             LightColor = 0;
@@ -52,15 +53,15 @@ namespace OpenTibiaXna.OTServer
         public ushort Mana { get; set; }
         public ushort MaxMana { get; set; }
 
-        public Outfit Outfit { get; set; }
+        public OutfitObject Outfit { get; set; }
         public Direction Direction { get; set; }
         public byte LightLevel { get; set; }
         public byte LightColor { get; set; }
         public Skull Skull { get; set; }
         public Party Party { get; set; }
         public ushort Speed { get; set; }
-        public Tile Tile { get; set; }
-        public Game Game { get; set; }
+        public TileObject Tile { get; set; }
+        public GameObject Game { get; set; }
 
         public bool IsPlayer
         {
@@ -92,17 +93,17 @@ namespace OpenTibiaXna.OTServer
 
         public void Say(string text)
         {
-            this.Game.CreatureSpeech(this, new Speech() { Type = SpeechType.Say, Message = text });
+            this.Game.CreatureSpeech(this, new SpeechObject() { Type = SpeechType.Say, Message = text });
         }
 
         public void Yell(string text)
         {
-            this.Game.CreatureSpeech(this, new Speech() { Type = SpeechType.Yell, Message = text });
+            this.Game.CreatureSpeech(this, new SpeechObject() { Type = SpeechType.Yell, Message = text });
         }
 
         public void Whisper(string text)
         {
-            this.Game.CreatureSpeech(this, new Speech() { Type = SpeechType.Whisper, Message = text });
+            this.Game.CreatureSpeech(this, new SpeechObject() { Type = SpeechType.Whisper, Message = text });
         }
 
         public void Step(Direction dir)

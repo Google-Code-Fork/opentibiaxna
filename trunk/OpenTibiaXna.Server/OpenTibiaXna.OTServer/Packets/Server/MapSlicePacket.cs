@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OpenTibiaXna.OTServer.Objects;
+using OpenTibiaXna.OTServer.Engines;
 
 namespace OpenTibiaXna.OTServer.Packets.Server
 {
@@ -11,9 +12,9 @@ namespace OpenTibiaXna.OTServer.Packets.Server
         public static void Add
         (
             Connection connection, 
-            NetworkMessage outMessage, 
-            Location fromLocation, 
-            Location toLocation
+            NetworkMessageEngine outMessage, 
+            LocationEngine fromLocation, 
+            LocationEngine toLocation
         )
         {
             if (fromLocation.Y > toLocation.Y)

@@ -5,15 +5,15 @@ using OpenTibiaXna.OTServer.Objects;
 
 public class OnlineCommand : IScript
 {
-    Game game;
-    public bool Start(Game game)
+    GameObject game;
+    public bool Start(GameObject game)
     {
         this.game = game;
         game.BeforeCreatureSpeech += BeforeCreatureSpeech;
         return true;
     }
 
-    public bool BeforeCreatureSpeech(Creature creature, Speech speech)
+    public bool BeforeCreatureSpeech(CreatureObject creature, SpeechObject speech)
     {
         if (creature.IsPlayer && speech.Message.ToLower().Equals("/online"))
         {

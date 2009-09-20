@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenTibiaXna.OTServer.Objects;
+using OpenTibiaXna.OTServer.Engines;
 
 namespace OpenTibiaXna.OTServer.Packets.Client
 {
-    public class PlayerSpeechPacket : Packet
+    public class PlayerSpeechPacket : PacketObject
     {
-        public Speech Speech { get; private set; }
+        public SpeechObject Speech { get; private set; }
 
-        public static PlayerSpeechPacket Parse(NetworkMessage message)
+        public static PlayerSpeechPacket Parse(NetworkMessageEngine message)
         {
             PlayerSpeechPacket packet = new PlayerSpeechPacket();
-            packet.Speech = new Speech();
+            packet.Speech = new SpeechObject();
             packet.Speech.Type = (SpeechType)message.GetByte();
 
             switch (packet.Speech.Type)

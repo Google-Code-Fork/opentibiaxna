@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenTibiaXna.OTServer.Engines;
+using OpenTibiaXna.OTServer.Objects;
 
 namespace OpenTibiaXna.OTServer.Packets.Server
 {
-    public class MessageOfTheDayPacket : Packet
+    public class MessageOfTheDayPacket : PacketObject
     {
-        public static void Add(NetworkMessage message, string messageOfTheDay)
+        public static void Add(NetworkMessageEngine message, string messageOfTheDay)
         {
             message.AddByte((byte)ServerPacketType.MessageOfTheDay);
             message.AddString("1\n" + messageOfTheDay);
         }
 
-        public MessageOfTheDayPacket Parse(NetworkMessage message)
+        public MessageOfTheDayPacket Parse(NetworkMessageEngine message)
         {
             return new MessageOfTheDayPacket();
         }

@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenTibiaXna.OTServer.Engines;
+using OpenTibiaXna.OTServer.Objects;
 
 namespace OpenTibiaXna.OTServer.Packets.Client
 {
-    public class ClientChannelOpenPacket : Packet
+    public class ClientChannelOpenPacket : PacketObject
     {
         public ChatChannel Channel { get; set; }
 
-        public static ClientChannelOpenPacket Parse(NetworkMessage message)
+        public static ClientChannelOpenPacket Parse(NetworkMessageEngine message)
         {
             ClientChannelOpenPacket p = new ClientChannelOpenPacket();
             p.Channel = (ChatChannel)message.GetUInt16();

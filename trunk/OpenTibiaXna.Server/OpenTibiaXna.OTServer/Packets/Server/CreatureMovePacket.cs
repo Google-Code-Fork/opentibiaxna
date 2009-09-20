@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenTibiaXna.OTServer.Engines;
+using OpenTibiaXna.OTServer.Objects;
 
 namespace OpenTibiaXna.OTServer.Packets.Server
 {
-    public class CreatureMovePacket : Packet
+    public class CreatureMovePacket : PacketObject
     {
         public static void Add
         (
-            NetworkMessage message,
-            Location fromLocation,
+            NetworkMessageEngine message,
+            LocationEngine fromLocation,
             byte fromStackPosition,
-            Location toLocation
+            LocationEngine toLocation
         )
         {
             message.AddByte((byte)ServerPacketType.CreatureMove);

@@ -66,7 +66,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountEngine.cs" />
+    <Compile Include="Engines\AccountEngine.cs" />
+    <Compile Include="Engines\ServerEngine.cs" />
     <Compile Include="Entities\MapItem.cs" />
     <Compile Include="Entities\MSSQLEntities.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -77,9 +78,9 @@
     <Compile Include="Objects\Channel.cs" />
     <Compile Include="Objects\CharacterListItem.cs" />
     <Compile Include="Objects\Connection.cs" />
-    <Compile Include="Creature.cs" />
+    <Compile Include="Objects\CreatureObject.cs" />
     <Compile Include="Database.cs" />
-    <Compile Include="DatabaseEngine.cs" />
+    <Compile Include="Engines\DatabaseEngine.cs" />
     <Compile Include="DatItem.cs" />
     <Compile Include="DatReader.cs" />
     <Compile Include="Entities\Account.cs" />
@@ -96,10 +97,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Objects\MapObject.cs" />
     <Compile Include="Objects\PlayerObject.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="GameWorldEngine.cs" />
+    <Compile Include="Objects\GameObject.cs" />
+    <Compile Include="Engines\GameWorldEngine.cs" />
     <Compile Include="Helpers\BigInteger.cs" />
     <Compile Include="Helpers\Checksum\AdlerChecksum.cs" />
     <Compile Include="Helpers\Cryptography\Rsa.cs" />
@@ -116,10 +118,9 @@
     <Compile Include="Items\Container.cs" />
     <Compile Include="Items\ItemObject.cs" />
     <Compile Include="Items\Weapon.cs" />
-    <Compile Include="Location.cs" />
-    <Compile Include="Map.cs" />
-    <Compile Include="MapEngine.cs" />
-    <Compile Include="Outfit.cs" />
+    <Compile Include="Engines\LocationEngine.cs" />
+    <Compile Include="Engines\MapEngine.cs" />
+    <Compile Include="Objects\OutfitObject.cs" />
     <Compile Include="Packets\Client\AccountPacket.cs" />
     <Compile Include="Packets\Client\ChangeOutfitPacket.cs" />
     <Compile Include="Packets\Client\ChannelClosePacket.cs" />
@@ -131,8 +132,8 @@
     <Compile Include="Packets\Client\PrivateChannelOpenPacket.cs" />
     <Compile Include="Packets\Client\VipAddPacket.cs" />
     <Compile Include="Packets\Client\VipRemovePacket.cs" />
-    <Compile Include="Packets\NetworkMessage.cs" />
-    <Compile Include="Packets\Packet.cs" />
+    <Compile Include="Engines\NetworkMessageEngine.cs" />
+    <Compile Include="Objects\PacketObject.cs" />
     <Compile Include="Packets\Server\ChannelListPacket.cs" />
     <Compile Include="Packets\Server\ChannelOpenPacket.cs" />
     <Compile Include="Packets\Server\ChannelOpenPrivatePacket.cs" />
@@ -162,17 +163,16 @@
     <Compile Include="Packets\Server\VipLogoutPacket.cs" />
     <Compile Include="Packets\Server\VipStatePacket.cs" />
     <Compile Include="Packets\Server\WorldLightPacket.cs" />
-    <Compile Include="PlayerEngine.cs" />
+    <Compile Include="Engines\PlayerEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LuaScripter\Script.cs" />
     <Compile Include="LuaScripter\Scripter.cs" />
     <Compile Include="Scripting\IScript.cs" />
     <Compile Include="Scripting\ScriptManager.cs" />
-    <Compile Include="ServerObject.cs" />
-    <Compile Include="Speech.cs" />
-    <Compile Include="Thing.cs" />
-    <Compile Include="Tile.cs" />
-    <Compile Include="Vip.cs" />
+    <Compile Include="Objects\SpeechObject.cs" />
+    <Compile Include="Objects\ThingObject.cs" />
+    <Compile Include="Objects\TileObject.cs" />
+    <Compile Include="Objects\VipObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Entities\MySQLEntities.edmx">

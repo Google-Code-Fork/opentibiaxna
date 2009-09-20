@@ -2,31 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Net;
-using System.Net.Sockets;
-using OpenTibiaXna.Helpers;
-using OpenTibiaXna.OTServer.Scripting;
-using OpenTibiaXna.Helpers.ServerSettings;
-using OpenTibiaXna.OTServer;
-using OpenTibiaXna.OTServer.Entities;
-using OpenTibiaXna.OTServer.Objects;
 using OpenTibiaXna.OTServer.Items;
+using System.Net.Sockets;
+using OpenTibiaXna.Helpers.ServerSettings;
+using OpenTibiaXna.OTServer.Objects;
+using OpenTibiaXna.OTServer.Entities;
+using System.Net;
+using OpenTibiaXna.OTServer.Scripting;
+using OpenTibiaXna.Helpers;
 
 namespace OpenTibiaXna.OTServer.Engines
 {
-    public class ServerObject
+    public class ServerEngine
     {
-        static void Main(string[] args)
-        {
-            new ServerObject().Run();
-        }
-
-        Game game;
+        GameObject game;
         GameWorld gameWorld;
 
-        TcpListener clientLoginListener = new TcpListener(IPAddress.Any, 
+        TcpListener clientLoginListener = new TcpListener(IPAddress.Any,
                                                          SettingsManager.GetLoginServerPort());
-        TcpListener clientGameListener = new TcpListener(IPAddress.Any, 
+        TcpListener clientGameListener = new TcpListener(IPAddress.Any,
                                                          SettingsManager.GetGameServerPort());
         List<Connection> connections = new List<Connection>();
 
@@ -36,7 +30,7 @@ namespace OpenTibiaXna.OTServer.Engines
         public void Run()
         {
             int id = -1;
-            game = new Game(this);
+            game = new GameObject();
 
             //if (!Database.AccountNameExists("creator"))
             //{
@@ -123,7 +117,7 @@ namespace OpenTibiaXna.OTServer.Engines
                     case ServerCommands.None:
                         break;
                     default:
-                        ServerObject.LogError("Unknow server command.");
+                        ServerEngine.LogError("Unknow server command.");
                         break;
                 }
 

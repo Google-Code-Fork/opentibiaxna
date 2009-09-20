@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenTibiaXna.OTServer.Engines;
+using OpenTibiaXna.OTServer.Objects;
 
 namespace OpenTibiaXna.OTServer.Packets.Server
 {
-    public class PlayerStatusPacket : Packet
+    public class PlayerStatusPacket : PacketObject
     {
         public static void Add
         (
-            NetworkMessage message,
+            NetworkMessageEngine message,
             ushort health,
             ushort maxHealth,
             uint capacity,

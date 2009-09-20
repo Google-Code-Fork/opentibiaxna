@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OpenTibiaXna.OTServer.Objects;
+using OpenTibiaXna.OTServer.Engines;
 
 namespace OpenTibiaXna.OTServer.Packets.Server
 {
@@ -11,10 +12,10 @@ namespace OpenTibiaXna.OTServer.Packets.Server
         public static void Add
         (
             Connection connection, 
-            NetworkMessage outMessage, 
-            Location fromLocation,
+            NetworkMessageEngine outMessage, 
+            LocationEngine fromLocation,
             byte fromStackPosition,
-            Location toLocation
+            LocationEngine toLocation
         )
         {
             //floor change down

@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenTibiaXna.OTServer.Objects;
+using OpenTibiaXna.OTServer.Engines;
 
 namespace OpenTibiaXna.OTServer.Packets.Server
 {
-    public class CreatureTurnPacket : Packet
+    public class CreatureTurnPacket : PacketObject
     {
         public static void Add
         (
-            NetworkMessage message,
-            Creature creature
+            NetworkMessageEngine message,
+            CreatureObject creature
         )
         {
             message.AddByte((byte)ServerPacketType.TileTransformThing);
