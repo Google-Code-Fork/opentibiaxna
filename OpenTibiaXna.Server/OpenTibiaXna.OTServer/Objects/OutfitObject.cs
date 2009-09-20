@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace OpenTibiaXna.OTServer
 {
-    public class Outfit
+    public class OutfitObject
     {
         public UInt16 LookType;
         public UInt16 LookItem;
@@ -14,7 +14,7 @@ namespace OpenTibiaXna.OTServer
         public byte Addons;
         public string Name = "";
 
-        public Outfit(UInt16 lookType, byte head, byte body, byte legs, byte feet, byte addons)
+        public OutfitObject(UInt16 lookType, byte head, byte body, byte legs, byte feet, byte addons)
         {
             LookType = lookType;
             Head = head;
@@ -25,7 +25,7 @@ namespace OpenTibiaXna.OTServer
             LookItem = 0;
         }
 
-        public Outfit(UInt16 lookType, UInt16 lookItem)
+        public OutfitObject(UInt16 lookType, UInt16 lookItem)
         {
             LookType = lookType;
             LookItem = lookItem;
@@ -36,7 +36,7 @@ namespace OpenTibiaXna.OTServer
             Addons = 0;
         }
 
-        public Outfit(string name, UInt16 lookType, byte addons)
+        public OutfitObject(string name, UInt16 lookType, byte addons)
         {
             Name = name;
             LookType = lookType;

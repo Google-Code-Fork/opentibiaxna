@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using OpenTibiaXna.OTServer.Objects;
 using OpenTibiaXna.OTServer.Items;
+using OpenTibiaXna.OTServer.Engines;
 
 namespace OpenTibiaXna.OTServer.Packets.Server
 {
-    public class MapPacket : Packet
+    public class MapPacket : PacketObject
     {
-        public static void AddMapDescription(Connection connection, NetworkMessage message, int x, int y, int z, ushort width, ushort height)
+        public static void AddMapDescription(Connection connection, NetworkMessageEngine message, int x, int y, int z, ushort width, ushort height)
         {
             int MAP_MAX_LAYERS = 16;
             int skip = -1;
@@ -40,9 +41,9 @@ namespace OpenTibiaXna.OTServer.Packets.Server
             }
         }
 
-        public static int AddFloorDescription(Connection connection, NetworkMessage message, int x, int y, int z, int width, int height, int offset, int skip)
+        public static int AddFloorDescription(Connection connection, NetworkMessageEngine message, int x, int y, int z, int width, int height, int offset, int skip)
         {
-            Tile tile;
+            TileObject tile;
 
             for (int nx = 0; nx < width; nx++)
             {
@@ -76,7 +77,7 @@ namespace OpenTibiaXna.OTServer.Packets.Server
             return skip;
         }
 
-        public static void AddTileDescription(Connection connection, NetworkMessage message, Tile tile)
+        public static void AddTileDescription(Connection connection, NetworkMessageEngine message, TileObject tile)
         {
             if (tile != null)
             {
@@ -93,7 +94,7 @@ namespace OpenTibiaXna.OTServer.Packets.Server
                     message.AddItem(item);
                 }
 
-                foreach (Creature creature in tile.Creatures)
+                foreach (CreatureObject creature in tile.Creatures)
                 {
                     if (true)// (player->canSeeCreature(*cit))
                     {

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
+using OpenTibiaXna.OTServer.Objects;
+using OpenTibiaXna.OTServer.Engines;
 
 namespace OpenTibiaXna.OTServer.Items
 {
-    public class ItemObject : Thing
+    public class ItemObject : ThingObject
     {
         //TODO:
         //Loading all items from item.XML
@@ -14,7 +16,7 @@ namespace OpenTibiaXna.OTServer.Items
         public double Weight { get; set; }
         public ushort Id;
         public byte Extra;
-        public Location Location { get; set; }
+        public LocationEngine Location { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Article { get; set; }

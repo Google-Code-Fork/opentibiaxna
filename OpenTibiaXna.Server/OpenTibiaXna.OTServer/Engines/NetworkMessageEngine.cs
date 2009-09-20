@@ -5,10 +5,12 @@ using System.Text;
 using OpenTibiaXna.OTServer.Items;
 using OpenTibiaXna.Helpers.Cryptography;
 using OpenTibiaXna.Helpers.Checksum;
+using OpenTibiaXna.OTServer.Objects;
+using OpenTibiaXna.OTServer.Engines;
 
-namespace OpenTibiaXna.OTServer.Packets
+namespace OpenTibiaXna.OTServer.Engines
 {
-    public class NetworkMessage
+    public class NetworkMessageEngine
     {
         #region Instance Variables
 
@@ -52,17 +54,17 @@ namespace OpenTibiaXna.OTServer.Packets
 
         #region Constructors
 
-        public NetworkMessage()
+        public NetworkMessageEngine()
         {
             Reset();
         }
 
-        public NetworkMessage(int startingIndex)
+        public NetworkMessageEngine(int startingIndex)
         {
             Reset(startingIndex);
         }
 
-        public NetworkMessage(NetworkMessage message)
+        public NetworkMessageEngine(NetworkMessageEngine message)
             : this(0)
         {
             AddBytes(message.GetData());
@@ -121,13 +123,13 @@ namespace OpenTibiaXna.OTServer.Packets
             return BitConverter.ToUInt32(GetBytes(4), 0);
         }
 
-        public Location GetLocation()
+        public LocationEngine GetLocation()
         {
             UInt16 x = GetUInt16();
             UInt16 y = GetUInt16();
             byte z = GetByte();
 
-            return new Location(x, y, z);
+            return new LocationEngine(x, y, z);
         }
 
         private ushort GetPacketHeader()
@@ -135,7 +137,7 @@ namespace OpenTibiaXna.OTServer.Packets
             return BitConverter.ToUInt16(buffer, 0);
         }
 
-        public Outfit GetOutfit()
+        public OutfitObject GetOutfit()
         {
             byte head, body, legs, feet, addons;
             ushort looktype = GetUInt16();
@@ -148,10 +150,10 @@ namespace OpenTibiaXna.OTServer.Packets
                 feet = GetByte();
                 addons = GetByte();
 
-                return new Outfit(looktype, head, body, legs, feet, addons);
+                return new OutfitObject(looktype, head, body, legs, feet, addons);
             }
             else
-                return new Outfit(looktype, GetUInt16());
+                return new OutfitObject(looktype, GetUInt16());
         }
 
         #endregion
@@ -194,14 +196,14 @@ namespace OpenTibiaXna.OTServer.Packets
             AddBytes(BitConverter.GetBytes(value));
         }
 
-        public void AddLocation(Location loc)
+        public void AddLocation(LocationEngine loc)
         {
             AddUInt16((ushort)loc.X);
             AddUInt16((ushort)loc.Y);
             AddByte((byte)loc.Z);
         }
 
-        public void AddOutfit(Outfit outfit)
+        public void AddOutfit(OutfitObject outfit)
         {
             AddUInt16(outfit.LookType);
             if (outfit.LookType != 0)
@@ -218,7 +220,7 @@ namespace OpenTibiaXna.OTServer.Packets
             }
         }
 
-        public void AddCreature(Creature creature, bool known, uint removeKnown)
+        public void AddCreature(CreatureObject creature, bool known, uint removeKnown)
         {
             if (known)
             {

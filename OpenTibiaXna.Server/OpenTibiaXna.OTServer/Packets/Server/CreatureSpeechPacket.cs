@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenTibiaXna.OTServer.Engines;
+using OpenTibiaXna.OTServer.Objects;
 
 namespace OpenTibiaXna.OTServer.Packets.Server
 {
-    public class CreatureSpeechPacket : Packet
+    public class CreatureSpeechPacket : PacketObject
     {
         public static void Add
         (
-            NetworkMessage message, 
+            NetworkMessageEngine message, 
             string senderName, 
             ushort senderLevel, 
             SpeechType speechType, 
             string text, 
-            Location location, 
+            LocationEngine location, 
             ChatChannel channelId, 
             uint time
         )

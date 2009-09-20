@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenTibiaXna.OTServer.Engines;
 
 namespace OpenTibiaXna.OTServer.Packets.Client
 {
@@ -9,7 +10,7 @@ namespace OpenTibiaXna.OTServer.Packets.Client
     {
         public uint Id { get; set; }
 
-        public static VipRemovePacket Parse(NetworkMessage message)
+        public static VipRemovePacket Parse(NetworkMessageEngine message)
         {
             VipRemovePacket p = new VipRemovePacket();
             p.Id = message.GetUInt32();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenTibiaXna.OTServer.Engines;
 
 namespace OpenTibiaXna.OTServer.Packets.Client
 {
@@ -9,7 +10,7 @@ namespace OpenTibiaXna.OTServer.Packets.Client
     {
         public string Name { get; set; }
 
-        public static VipAddPacket Parse(NetworkMessage message)
+        public static VipAddPacket Parse(NetworkMessageEngine message)
         {
             VipAddPacket p = new VipAddPacket();
 

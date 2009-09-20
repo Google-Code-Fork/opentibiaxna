@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenTibiaXna.OTServer.Engines;
+using OpenTibiaXna.OTServer.Objects;
 
 namespace OpenTibiaXna.OTServer.Packets.Server
 {
-    public class CreatureHealthPacket : Packet
+    public class CreatureHealthPacket : PacketObject
     {
         public static void Add
        (
-           NetworkMessage message,
+           NetworkMessageEngine message,
            uint creatureID,
            byte newHealth
        )

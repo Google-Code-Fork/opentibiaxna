@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenTibiaXna.OTServer.Engines;
+using OpenTibiaXna.OTServer.Objects;
 
 namespace OpenTibiaXna.OTServer.Packets.Client
 {
-    public class LoginPacket : Packet
+    public class LoginPacket : PacketObject
     {
         public ushort Os { get; set; }
         public ushort Version { get; set; }
@@ -15,12 +17,12 @@ namespace OpenTibiaXna.OTServer.Packets.Client
         public string CharacterName { get; set; }
         public string Password { get; set; }
 
-        public static void Add(NetworkMessage message)
+        public static void Add(NetworkMessageEngine message)
         {
             
         }
 
-        public static LoginPacket Parse(NetworkMessage message)
+        public static LoginPacket Parse(NetworkMessageEngine message)
         {
             LoginPacket packet = new LoginPacket();
             packet.Os = message.GetUInt16(); // OS

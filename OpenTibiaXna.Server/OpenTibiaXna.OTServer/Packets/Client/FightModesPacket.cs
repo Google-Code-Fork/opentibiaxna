@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenTibiaXna.OTServer.Engines;
+using OpenTibiaXna.OTServer.Objects;
 
 namespace OpenTibiaXna.OTServer.Packets.Client
 {
-    public class FightModesPacket : Packet
+    public class FightModesPacket : PacketObject
     {
         public FightModes FightMode { get; set; }
         public bool ChaseMode { get; set; }
         public bool SafeMode { get; set; }
 
 
-        public static FightModesPacket Parse(NetworkMessage msg)
+        public static FightModesPacket Parse(NetworkMessageEngine msg)
         {
             FightModesPacket p = new FightModesPacket();
 

@@ -18,7 +18,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
         Socket socket;
         NetworkStream stream;
-        NetworkMessage inMessage = new NetworkMessage(0);
+        NetworkMessageEngine inMessage = new NetworkMessageEngine(0);
         uint[] xteaKey = new uint[4];
         bool remove = false;
         HashSet<uint> knownCreatures = new HashSet<uint>();
@@ -27,7 +27,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
         #region Constructor
 
-        public Connection(Game game)
+        public Connection(GameObject game)
         {
             this.Game = game;
         }
@@ -38,7 +38,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
         public PlayerObject Player { get; set; }
 
-        public Game Game { get; set; }
+        public GameObject Game { get; set; }
 
         public long AccountId { get; set; }
 
@@ -173,7 +173,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
         #region Parse
 
-        private void ParseLoginPacket(NetworkMessage message)
+        private void ParseLoginPacket(NetworkMessageEngine message)
         {
             LoginPacket loginPacket = LoginPacket.Parse(message);
             xteaKey = loginPacket.XteaKey;
@@ -191,7 +191,7 @@ namespace OpenTibiaXna.OTServer.Objects
             }
         }
 
-        private void ParseClientPacket(ClientPacketType type, NetworkMessage message)
+        private void ParseClientPacket(ClientPacketType type, NetworkMessageEngine message)
         {
             switch (type)
             {
@@ -290,7 +290,7 @@ namespace OpenTibiaXna.OTServer.Objects
                     Game.CreatureMove(Player,  Direction.NorthWest);
                     break;
                 default:
-                    ServerObject.Log("Unhandled packet from " + Player.ToString() + ": " + type);
+                    ServerEngine.Log("Unhandled packet from " + Player.ToString() + ": " + type);
                     break;
             }
         }
@@ -300,44 +300,44 @@ namespace OpenTibiaXna.OTServer.Objects
             Game.PlayerLogout(Player);
         }
 
-        public void ParsePlayerSpeech(NetworkMessage message)
+        public void ParsePlayerSpeech(NetworkMessageEngine message)
         {
             PlayerSpeechPacket packet = PlayerSpeechPacket.Parse(message);
 
             Game.CreatureSpeech(this.Player, packet.Speech);
         }
 
-        public void ParseClientChannelOpen(NetworkMessage message)
+        public void ParseClientChannelOpen(NetworkMessageEngine message)
         {
             ClientChannelOpenPacket packet = ClientChannelOpenPacket.Parse(message);
             Game.ChannelOpen(Player, packet.Channel);
         }
 
-        public void ParseChannelClose(NetworkMessage message)
+        public void ParseChannelClose(NetworkMessageEngine message)
         {
             ChannelClosePacket packet = ChannelClosePacket.Parse(message);
             Game.ChannelClose(Player, packet.Channel);
         }
         
-        public void ParseVipAdd(NetworkMessage message)
+        public void ParseVipAdd(NetworkMessageEngine message)
         {
             VipAddPacket packet = VipAddPacket.Parse(message);
             Game.VipAdd(Player, packet.Name);
         }
 
-        public void ParseVipRemove(NetworkMessage message)
+        public void ParseVipRemove(NetworkMessageEngine message)
         {
             VipRemovePacket packet = VipRemovePacket.Parse(message);
             Game.VipRemove(Player, packet.Id);
         }
 
-        public void ParseChangeOutfit(NetworkMessage message)
+        public void ParseChangeOutfit(NetworkMessageEngine message)
         {
             ChangeOutfitPacket packet = ChangeOutfitPacket.Parse(message);
             Game.PlayerChangeOutfit(Player, packet.Outfit);
         }
 
-        public void ParseFightModes(NetworkMessage message)
+        public void ParseFightModes(NetworkMessageEngine message)
         {
             FightModesPacket packet = FightModesPacket.Parse(message);
             Player.FightMode = (FightModes)packet.FightMode;
@@ -345,13 +345,13 @@ namespace OpenTibiaXna.OTServer.Objects
             Player.SafeMode = packet.SafeMode;
         }
 
-        public void ParsePrivateChannelOpen(NetworkMessage message)
+        public void ParsePrivateChannelOpen(NetworkMessageEngine message)
         {
             PrivateChannelOpenPacket packet = PrivateChannelOpenPacket.Parse(message);
             Game.PrivateChannelOpen(Player, packet.Receiver);
         }
 
-        public void ParseLookAt(NetworkMessage message)
+        public void ParseLookAt(NetworkMessageEngine message)
         {
             LookAtPacket packet = LookAtPacket.Parse(message);
             Game.PlayerLookAt(Player, packet.Id, packet.Location, packet.StackPosition);
@@ -363,7 +363,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
         private void SendConnectionPacket()
         {
-            NetworkMessage message = new NetworkMessage();
+            NetworkMessageEngine message = new NetworkMessageEngine();
 
             GameServerConnectPacket.Add(message);
 
@@ -372,7 +372,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
         public void SendCharacterList(string motd, ushort premiumDays, IEnumerable<CharacterListItem> chars)
         {
-            NetworkMessage message = new NetworkMessage();
+            NetworkMessageEngine message = new NetworkMessageEngine();
 
             if (motd != string.Empty)
             {
@@ -392,7 +392,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
         public void SendInitialPacket()
         {
-            NetworkMessage message = new NetworkMessage();
+            NetworkMessageEngine message = new NetworkMessageEngine();
 
             SelfAppearPacket.Add(
                 message,
@@ -463,71 +463,71 @@ namespace OpenTibiaXna.OTServer.Objects
 
         public void SendOutfitWindow()
         {
-            NetworkMessage message = new NetworkMessage();
+            NetworkMessageEngine message = new NetworkMessageEngine();
 
             // TODO: put somewhere else, xml?
-            List<Outfit> outfits;
+            List<OutfitObject> outfits;
 
             if (Player.Gender == Gender.Male)
             {
-                outfits = new List<Outfit>
+                outfits = new List<OutfitObject>
                 {
-                    new Outfit("Citizen", 128, 7),
-                    new Outfit("Hunter", 129, 7),
-                    new Outfit("Mage", 130, 7),
-                    new Outfit("Knight", 131, 7),
-                    new Outfit("Nobleman", 132, 7),
-                    new Outfit("Summoner", 133, 7),
-                    new Outfit("Warrior", 134, 7),
-                    new Outfit("Barbarian", 143, 7),
-                    new Outfit("Druid", 144, 7),
-                    new Outfit("Wizard", 145, 7),
-                    new Outfit("Oriental", 146, 7),
-                    new Outfit("Pirate", 151, 7),
-                    new Outfit("Assassin", 152, 7),
-                    new Outfit("Beggar", 153, 7),
-                    new Outfit("Shaman", 154, 7),
-                    new Outfit("Norseman", 251, 7),
-                    new Outfit("Nightmare", 268, 7),
-                    new Outfit("Jester", 273, 7),
-                    new Outfit("Brotherhood", 278, 7),
-                    new Outfit("Demonhunter", 289, 7),
-                    new Outfit("Yalaharian", 325, 7),
-                    new Outfit("Wedding", 328, 7),
-                    new Outfit("Gamemaster", 75, 7),
-                    new Outfit("Old Com. Manager", 266, 7),
-                    new Outfit("Com. Manager", 302, 7)
+                    new OutfitObject("Citizen", 128, 7),
+                    new OutfitObject("Hunter", 129, 7),
+                    new OutfitObject("Mage", 130, 7),
+                    new OutfitObject("Knight", 131, 7),
+                    new OutfitObject("Nobleman", 132, 7),
+                    new OutfitObject("Summoner", 133, 7),
+                    new OutfitObject("Warrior", 134, 7),
+                    new OutfitObject("Barbarian", 143, 7),
+                    new OutfitObject("Druid", 144, 7),
+                    new OutfitObject("Wizard", 145, 7),
+                    new OutfitObject("Oriental", 146, 7),
+                    new OutfitObject("Pirate", 151, 7),
+                    new OutfitObject("Assassin", 152, 7),
+                    new OutfitObject("Beggar", 153, 7),
+                    new OutfitObject("Shaman", 154, 7),
+                    new OutfitObject("Norseman", 251, 7),
+                    new OutfitObject("Nightmare", 268, 7),
+                    new OutfitObject("Jester", 273, 7),
+                    new OutfitObject("Brotherhood", 278, 7),
+                    new OutfitObject("Demonhunter", 289, 7),
+                    new OutfitObject("Yalaharian", 325, 7),
+                    new OutfitObject("Wedding", 328, 7),
+                    new OutfitObject("Gamemaster", 75, 7),
+                    new OutfitObject("Old Com. Manager", 266, 7),
+                    new OutfitObject("Com. Manager", 302, 7)
                 };
             }
             else
             {
-                outfits = new List<Outfit>
+                outfits = new List<OutfitObject>
                 {
-                    new Outfit("Citizen", 136, 7),
-                    new Outfit("Hunter", 137, 7),
-                    new Outfit("Mage", 138, 7),
-                    new Outfit("Knight", 139, 7),
-                    new Outfit("Noblewoman", 140, 7),
-                    new Outfit("Summoner", 141, 7),
-                    new Outfit("Warrior", 142, 7),
-                    new Outfit("Barbarian", 147, 7),
-                    new Outfit("Druid", 148, 7),
-                    new Outfit("Wizard", 149, 7),
-                    new Outfit("Oriental", 150, 7),
-                    new Outfit("Pirate", 155, 7),
-                    new Outfit("Assassin", 156, 7),
-                    new Outfit("Beggar", 157, 7),
-                    new Outfit("Shaman", 158, 7),
-                    new Outfit("Norsewoman", 252, 7),
-                    new Outfit("Nightmare", 269, 7),
-                    new Outfit("Jester", 270, 7),
-                    new Outfit("Brotherhood", 279, 7),
-                    new Outfit("Demonhunter", 288, 7),
-                    new Outfit("Yalaharian", 324, 7),
-                    new Outfit("Wedding", 329, 7),
-                    new Outfit("Gamemaster", 75, 7),
-                    new Outfit("Old Com. Manager", 266, 7),
-                    new Outfit("Com. Manager", 302, 0)
+                    new OutfitObject("Citizen", 136, 7),
+                    new OutfitObject("Hunter", 137, 7),
+                    new OutfitObject("Mage", 138, 7),
+                    new OutfitObject("Knight", 139, 7),
+                    new OutfitObject("Noblewoman", 140, 7),
+                    new OutfitObject("Summoner", 141, 7),
+                    new OutfitObject("Warrior", 142, 7),
+                    new OutfitObject("Barbarian", 147, 7),
+                    new OutfitObject("Druid", 148, 7),
+                    new OutfitObject("Wizard", 149, 7),
+                    new OutfitObject("Oriental", 150, 7),
+                    new OutfitObject("Pirate", 155, 7),
+                    new OutfitObject("Assassin", 156, 7),
+                    new OutfitObject("Beggar", 157, 7),
+                    new OutfitObject("Shaman", 158, 7),
+                    new OutfitObject("Norsewoman", 252, 7),
+                    new OutfitObject("Nightmare", 269, 7),
+                    new OutfitObject("Jester", 270, 7),
+                    new OutfitObject("Brotherhood", 279, 7),
+                    new OutfitObject("Demonhunter", 288, 7),
+                    new OutfitObject("Yalaharian", 324, 7),
+                    new OutfitObject("Wedding", 329, 7),
+                    new OutfitObject("Gamemaster", 75, 7),
+                    new OutfitObject("Old Com. Manager", 266, 7),
+                    new OutfitObject("Com. Manager", 302, 0)
                 };
             }
             OutfitWindowPacket.Add(
@@ -541,7 +541,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
         public void SendStatus()
         {
-            NetworkMessage outMessage = new NetworkMessage();
+            NetworkMessageEngine outMessage = new NetworkMessageEngine();
             PlayerStatusPacket.Add(
                outMessage,
                 Player.Health,
@@ -561,9 +561,9 @@ namespace OpenTibiaXna.OTServer.Objects
             Send(outMessage);
         }
 
-        public void SendCreatureChangeOutfit(Creature creature)
+        public void SendCreatureChangeOutfit(CreatureObject creature)
         {
-            NetworkMessage message = new NetworkMessage();
+            NetworkMessageEngine message = new NetworkMessageEngine();
 
             CreatureChangeOutfitPacket.Add(
                 message,
@@ -573,9 +573,9 @@ namespace OpenTibiaXna.OTServer.Objects
             Send(message);
         }
 
-        public void SendCreatureMove(Location fromLocation, byte fromStackPosition, Location toLocation)
+        public void SendCreatureMove(LocationEngine fromLocation, byte fromStackPosition, LocationEngine toLocation)
         {
-            NetworkMessage outMessage = new NetworkMessage();
+            NetworkMessageEngine outMessage = new NetworkMessageEngine();
 
             CreatureMovePacket.Add(
                 outMessage,
@@ -587,9 +587,9 @@ namespace OpenTibiaXna.OTServer.Objects
             Send(outMessage);
         }
 
-        public void SendCreatureUpdateHealth(Creature creature)
+        public void SendCreatureUpdateHealth(CreatureObject creature)
         {
-            NetworkMessage outMessage = new NetworkMessage();
+            NetworkMessageEngine outMessage = new NetworkMessageEngine();
 
             CreatureHealthPacket.Add(
                 outMessage,
@@ -599,9 +599,9 @@ namespace OpenTibiaXna.OTServer.Objects
             Send(outMessage);
         }
 
-        public void SendCreatureLogout(Creature creature)
+        public void SendCreatureLogout(CreatureObject creature)
         {
-            NetworkMessage message = new NetworkMessage();
+            NetworkMessageEngine message = new NetworkMessageEngine();
             EffectPacket.Add(
                 message,
                 Effect.Puff, // TODO: find the new value for poof
@@ -615,9 +615,9 @@ namespace OpenTibiaXna.OTServer.Objects
             Send(message);
         }
 
-        public void SendTileRemoveThing(Location fromLocation, byte fromStackPosition)
+        public void SendTileRemoveThing(LocationEngine fromLocation, byte fromStackPosition)
         {
-            NetworkMessage message = new NetworkMessage();
+            NetworkMessageEngine message = new NetworkMessageEngine();
             TileRemoveThingPacket.Add(
                 message, 
                 fromLocation, 
@@ -626,9 +626,9 @@ namespace OpenTibiaXna.OTServer.Objects
             Send(message);
         }
 
-        public void SendCreatureAppear(Creature creature)
+        public void SendCreatureAppear(CreatureObject creature)
         {
-            NetworkMessage message = new NetworkMessage();
+            NetworkMessageEngine message = new NetworkMessageEngine();
 
             EffectPacket.Add(
                 message,
@@ -650,9 +650,9 @@ namespace OpenTibiaXna.OTServer.Objects
             Send(message);
         }
 
-        public void SendTileAddCreature(Creature creature)
+        public void SendTileAddCreature(CreatureObject creature)
         {
-            NetworkMessage message = new NetworkMessage();
+            NetworkMessageEngine message = new NetworkMessageEngine();
             uint remove;
             bool known = IsCreatureKnown(creature.Id, out remove);
             TileAddCreaturePacket.Add(
@@ -666,9 +666,9 @@ namespace OpenTibiaXna.OTServer.Objects
             Send(message);
         }
 
-        public void SendPlayerMove(Location fromLocation, byte fromStackPosition, Location toLocation)
+        public void SendPlayerMove(LocationEngine fromLocation, byte fromStackPosition, LocationEngine toLocation)
         {
-            NetworkMessage outMessage = new NetworkMessage();
+            NetworkMessageEngine outMessage = new NetworkMessageEngine();
 
             if (fromLocation.Z == 7 && toLocation.Z >= 8)
             {
@@ -721,10 +721,10 @@ namespace OpenTibiaXna.OTServer.Objects
             Send(outMessage);
         }
 
-        public void SendCreatureSpeech(Creature creature, SpeechType speechType, string message)
+        public void SendCreatureSpeech(CreatureObject creature, SpeechType speechType, string message)
         {
 
-            NetworkMessage outMessage = new NetworkMessage();
+            NetworkMessageEngine outMessage = new NetworkMessageEngine();
             CreatureSpeechPacket.Add(
                 outMessage,
                 creature.Name,
@@ -740,7 +740,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
         public void SendChannelSpeech(string sender, SpeechType type, ChatChannel channelId, string message)
         {
-            NetworkMessage outMessage = new NetworkMessage();
+            NetworkMessageEngine outMessage = new NetworkMessageEngine();
             CreatureSpeechPacket.Add(
                 outMessage,
                 sender,
@@ -754,9 +754,9 @@ namespace OpenTibiaXna.OTServer.Objects
             Send(outMessage);
         }   
 
-        public void SendCreatureTurn(Creature creature)
+        public void SendCreatureTurn(CreatureObject creature)
         {
-            NetworkMessage message = new NetworkMessage();
+            NetworkMessageEngine message = new NetworkMessageEngine();
             CreatureTurnPacket.Add(
                 message,
                 creature
@@ -766,7 +766,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
         public void SendCancelWalk()
         {
-            NetworkMessage message = new NetworkMessage();
+            NetworkMessageEngine message = new NetworkMessageEngine();
             PlayerWalkCancelPacket.Add(
                 message,
                 Player.Direction
@@ -776,7 +776,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
         public void SendDisconnect(string reason)
         {
-            NetworkMessage message = new NetworkMessage();
+            NetworkMessageEngine message = new NetworkMessageEngine();
             message.AddByte((byte)ServerPacketType.Disconnect);
             message.AddString(reason);
             Send(message);
@@ -784,7 +784,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
         public void SendChannelOpenPrivate(string name)
         {
-            NetworkMessage message = new NetworkMessage();
+            NetworkMessageEngine message = new NetworkMessageEngine();
             ChannelOpenPrivatePacket.Add(
                 message,
                 name
@@ -794,7 +794,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
         public void SendChannelList(PlayerObject player)
         {
-            NetworkMessage message = new NetworkMessage();
+            NetworkMessageEngine message = new NetworkMessageEngine();
             ChannelListPacket.Add(
                 message,
                 player.ChannelList
@@ -804,7 +804,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
         public void SendChannelOpen(Channel channel)
         {
-            NetworkMessage message = new NetworkMessage();
+            NetworkMessageEngine message = new NetworkMessageEngine();
             ChannelOpenPacket.Add(
                 message,
                 channel.Id,
@@ -815,7 +815,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
         public void SendTextMessage(TextMessageType type, string text)
         {
-            NetworkMessage message = new NetworkMessage();
+            NetworkMessageEngine message = new NetworkMessageEngine();
             TextMessagePacket.Add(
                 message,
                 type,
@@ -826,7 +826,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
         public void SendVipState(uint id, string name, bool loggedIn)
         {
-            NetworkMessage message = new NetworkMessage();
+            NetworkMessageEngine message = new NetworkMessageEngine();
             VipStatePacket.Add(
                 message,
                 id,
@@ -838,7 +838,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
         public void SendVipLogin(uint id)
         {
-            NetworkMessage message = new NetworkMessage();
+            NetworkMessageEngine message = new NetworkMessageEngine();
             VipLoginPacket.Add(
                 message,
                 id
@@ -848,7 +848,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
         public void SendVipLogout(uint id)
         {
-            NetworkMessage message = new NetworkMessage();
+            NetworkMessageEngine message = new NetworkMessageEngine();
             VipLogoutPacket.Add(
                 message,
                 id
@@ -856,12 +856,12 @@ namespace OpenTibiaXna.OTServer.Objects
             Send(message);
         }
 
-        public void Send(NetworkMessage message)
+        public void Send(NetworkMessageEngine message)
         {
             Send(message, true);
         }
 
-        public void Send(NetworkMessage message, bool useEncryption)
+        public void Send(NetworkMessageEngine message, bool useEncryption)
         {
             if (useEncryption)
                 message.PrepareToSend(xteaKey);

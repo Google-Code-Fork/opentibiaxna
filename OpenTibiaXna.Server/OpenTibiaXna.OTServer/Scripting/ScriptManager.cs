@@ -7,6 +7,7 @@ using Microsoft.VisualBasic;
 using System.IO;
 using System.CodeDom.Compiler;
 using System.Reflection;
+using OpenTibiaXna.OTServer.Objects;
 
 namespace OpenTibiaXna.OTServer.Scripting
 {
@@ -18,7 +19,7 @@ namespace OpenTibiaXna.OTServer.Scripting
 
         private static StringBuilder errorLog;
 
-        public static string LoadAllScripts(Game game)
+        public static string LoadAllScripts(GameObject game)
         {
             errorLog = new StringBuilder();
 
@@ -31,7 +32,7 @@ namespace OpenTibiaXna.OTServer.Scripting
             return errorLog.ToString();
         }
 
-        public static void ReloadAllScripts(Game game)
+        public static void ReloadAllScripts(GameObject game)
         {
             UnloadAllScripts();
             LoadAllScripts(game);
@@ -46,7 +47,7 @@ namespace OpenTibiaXna.OTServer.Scripting
             loadedScripts.Clear();
         }
 
-        public static void LoadScript(Game game, string path)
+        public static void LoadScript(GameObject game, string path)
         {
             Assembly assembly = null;
             switch (Path.GetExtension(path))

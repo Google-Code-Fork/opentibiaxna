@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OpenTibiaXna.OTServer.Packets
+namespace OpenTibiaXna.OTServer.Objects
 {
-    public class Packet
+    public class PacketObject
     {
 
     }

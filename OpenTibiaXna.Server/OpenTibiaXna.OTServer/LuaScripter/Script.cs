@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LuaInterface;
+using OpenTibiaXna.OTServer.Objects;
 
 namespace OpenTibiaXna.OTServer.LuaScripter
 {
     public class Script
     {
-        public delegate bool EventDelegate(Creature cid, object[] args);//Our delegate for events
+        public delegate bool EventDelegate(CreatureObject cid, object[] args);//Our delegate for events
         private EventType eventType;//The type of event which raises this script
         private List<UInt32> eventItemIDs;//All the items supported by this event
         private List<UInt16> eventUniqueIDs;//All the unique IDs supported by this event
@@ -69,7 +70,7 @@ namespace OpenTibiaXna.OTServer.LuaScripter
             return false;
         }
 
-        public bool Raise(Creature cid, object[] args)
+        public bool Raise(CreatureObject cid, object[] args)
         {
             EventDelegate eventDelegate;
             eventDelegate = lua.GetFunction(typeof(EventDelegate), System.Enum.GetName(typeof(EventType), this.eventType)) as EventDelegate;

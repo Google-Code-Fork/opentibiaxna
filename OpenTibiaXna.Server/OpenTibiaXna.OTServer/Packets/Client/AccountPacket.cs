@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenTibiaXna.OTServer.Engines;
+using OpenTibiaXna.OTServer.Objects;
 
 namespace OpenTibiaXna.OTServer.Packets.Client
 {
-    public class AccountPacket : Packet
+    public class AccountPacket : PacketObject
     {
         public ushort Os { get; set; }
         public ushort Version { get; set; }
@@ -13,7 +15,7 @@ namespace OpenTibiaXna.OTServer.Packets.Client
         public string Name { get; set; }
         public string Password { get; set; }
 
-        public static AccountPacket Parse(NetworkMessage message)
+        public static AccountPacket Parse(NetworkMessageEngine message)
         {
             AccountPacket packet = new AccountPacket();
             packet.Os = message.GetUInt16(); // OS

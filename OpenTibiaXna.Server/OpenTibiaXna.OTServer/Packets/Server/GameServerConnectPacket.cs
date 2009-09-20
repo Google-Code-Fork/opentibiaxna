@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenTibiaXna.OTServer.Engines;
+using OpenTibiaXna.OTServer.Objects;
 
 namespace OpenTibiaXna.OTServer.Packets.Server
 {
-    public class GameServerConnectPacket : Packet
+    public class GameServerConnectPacket : PacketObject
     {
-        public static void Add(NetworkMessage message)
+        public static void Add(NetworkMessageEngine message)
         {
             message.AddByte(0x1F); // type
 
@@ -16,7 +18,7 @@ namespace OpenTibiaXna.OTServer.Packets.Server
             message.AddByte(0x10); // fractional time?
         }
 
-        public GameServerConnectPacket Parse(NetworkMessage message)
+        public GameServerConnectPacket Parse(NetworkMessageEngine message)
         {
             return new GameServerConnectPacket();
         }

@@ -5,26 +5,27 @@ using System.Text;
 using OpenTibiaXna.OTServer.Entities;
 using OpenTibiaXna.OTServer;
 using OpenTibiaXna.OTServer.Items;
+using OpenTibiaXna.OTServer.Objects;
 
 namespace OpenTibiaXna.OTServer.Engines
 {
     public class MapEngine
     {
-        public static void GetMapTiles(Map map)
+        public static void GetMapTiles(MapObject map)
         {
             foreach (MapTile mapTile in MapTile.GetAll())
             {
-                Tile newTile = new Tile();
+                TileObject newTile = new TileObject();
                 int x = mapTile.X - 32000;
                 int y = mapTile.Y - 32000;
                 int z = mapTile.Z;
                 newTile.Ground = new ItemObject((ushort)mapTile.GroundId);
-                Location location = new Location(x, y, z);
+                LocationEngine location = new LocationEngine(x, y, z);
                 map.SetTile(location, newTile);
             }
         }
 
-        public static void GetMapItems(Map map)
+        public static void GetMapItems(MapObject map)
         {
             foreach (MapItem mapItem in MapItem.GetAllOrderByStackPosition())
             {
@@ -34,7 +35,7 @@ namespace OpenTibiaXna.OTServer.Engines
                 ushort id = (ushort)mapItem.StackPosition;
                 byte extra = Convert.ToByte(mapItem.Extra);
 
-                Tile tile = map.GetTile(x, y, z);
+                TileObject tile = map.GetTile(x, y, z);
                 if (tile != null)
                 {
                     ItemObject item = new ItemObject(id);

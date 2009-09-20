@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OpenTibiaXna.OTServer
+namespace OpenTibiaXna.OTServer.Engines
 {
-    public class Location
+    public class LocationEngine
     {
         public int X;
         public int Y;
         public int Z;
 
-        public Location(int x, int y, int z)
+        public LocationEngine(int x, int y, int z)
         {
             X = x;
             Y = y;
@@ -21,7 +21,7 @@ namespace OpenTibiaXna.OTServer
             return X + ", " + Y + ", " + Z;
         }
 
-        public Location Offset(Direction direction)
+        public LocationEngine Offset(Direction direction)
         {
             int x = X, y = Y, z = Z;
 
@@ -57,10 +57,10 @@ namespace OpenTibiaXna.OTServer
                     break;
             }
 
-            return new Location(x, y, z);
+            return new LocationEngine(x, y, z);
         }
 
-        public bool CanSee(Location loc)
+        public bool CanSee(LocationEngine loc)
         {
 	        if(Z <= 7){
 		        //we are on ground level or above (7 -> 0)
@@ -87,12 +87,12 @@ namespace OpenTibiaXna.OTServer
 	        return false;
         }
 
-        public bool IsInRange(Location second, bool sameFloor, double range)
+        public bool IsInRange(LocationEngine second, bool sameFloor, double range)
         {
             return IsInRange(this, second, sameFloor, range);
         }
 
-        public static bool IsInRange(Location first, Location second, bool sameFloor, double range)
+        public static bool IsInRange(LocationEngine first, LocationEngine second, bool sameFloor, double range)
         {
             if (sameFloor && first.Z != second.Z) return false;
             int dx = first.X - second.X;

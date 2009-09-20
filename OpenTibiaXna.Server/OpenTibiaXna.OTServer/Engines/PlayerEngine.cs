@@ -49,7 +49,7 @@ namespace OpenTibiaXna.OTServer.Engines
                     int x = resultPlayer.LocationX.Value;
                     int y = resultPlayer.LocationY.Value;
                     int z = resultPlayer.LocationZ.Value;
-                    resultPlayer.PlayerObject.SavedLocation = new Location(x, y, z);
+                    resultPlayer.PlayerObject.SavedLocation = new LocationEngine(x, y, z);
                     resultPlayer.PlayerObject.Direction = (Direction)resultPlayer.Direction;
                 }
 

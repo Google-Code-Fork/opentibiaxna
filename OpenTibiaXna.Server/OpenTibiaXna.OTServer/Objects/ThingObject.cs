@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OpenTibiaXna.OTServer
+namespace OpenTibiaXna.OTServer.Objects
 {
-    public abstract class Thing
+    public abstract class ThingObject
     {
         protected abstract ushort GetThingId();
 
