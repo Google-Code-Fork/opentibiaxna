@@ -19,7 +19,7 @@ namespace OpenTibiaXna.OTServer.GUI
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            new ServerEngine().Run();
+
         }
     }
 }

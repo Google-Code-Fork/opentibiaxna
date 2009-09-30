@@ -15,7 +15,7 @@ namespace OpenTibiaXna.OTServer.Engines
         #region Instance Variables
 
         private byte[] buffer;
-        private int position, length, bufferSize = 16394;
+        private int fposition, flength, fbufferSize = 16394;
 
         #endregion
 
@@ -23,14 +23,14 @@ namespace OpenTibiaXna.OTServer.Engines
 
         public int Length
         {
-            get { return length; }
-            set { length = value; }
+            get { return flength; }
+            set { flength = value; }
         }
 
         public int Position
         {
-            get { return position; }
-            set { position = value; }
+            get { return fposition; }
+            set { fposition = value; }
         }
 
         public byte[] Buffer
@@ -40,13 +40,13 @@ namespace OpenTibiaXna.OTServer.Engines
 
         public int BufferSize
         {
-            get { return bufferSize; }
+            get { return fbufferSize; }
         }
 
         public byte[] GetData()
         {
-            byte[] t = new byte[length];
-            Array.Copy(buffer, t, length);
+            byte[] t = new byte[flength];
+            Array.Copy(buffer, t, flength);
             return t;
         }
 
@@ -72,9 +72,9 @@ namespace OpenTibiaXna.OTServer.Engines
 
         public void Reset(int startingIndex)
         {
-            buffer = new byte[bufferSize];
-            length = startingIndex;
-            position = startingIndex;
+            buffer = new byte[fbufferSize];
+            flength = startingIndex;
+            fposition = startingIndex;
         }
 
         public void Reset()
@@ -88,28 +88,28 @@ namespace OpenTibiaXna.OTServer.Engines
 
         public byte GetByte()
         {
-            if (position + 1 > length)
+            if (fposition + 1 > flength)
                 throw new IndexOutOfRangeException("NetworkMessage GetByte() out of range.");
 
-            return buffer[position++];
+            return buffer[fposition++];
         }
 
         public byte[] GetBytes(int count)
         {
-            if (position + count > length)
+            if (fposition + count > flength)
                 throw new IndexOutOfRangeException("NetworkMessage GetBytes() out of range.");
 
             byte[] t = new byte[count];
-            Array.Copy(buffer, position, t, 0, count);
-            position += count;
+            Array.Copy(buffer, fposition, t, 0, count);
+            fposition += count;
             return t;
         }
 
         public string GetString()
         {
             int len = (int)GetUInt16();
-            string t = System.Text.ASCIIEncoding.Default.GetString(buffer, position, len);
-            position += len;
+            string t = System.Text.ASCIIEncoding.Default.GetString(buffer, fposition, len);
+            fposition += len;
             return t;
         }
 
@@ -162,7 +162,7 @@ namespace OpenTibiaXna.OTServer.Engines
 
         public void AddByte(byte value)
         {
-            if (1 + length > bufferSize)
+            if (1 + flength > fbufferSize)
                 throw new Exception("NetworkMessage buffer is full.");
 
             AddBytes(new byte[] { value });
@@ -170,14 +170,14 @@ namespace OpenTibiaXna.OTServer.Engines
 
         public void AddBytes(byte[] value)
         {
-            if (value.Length + length > bufferSize)
+            if (value.Length + flength > fbufferSize)
                 throw new Exception("NetworkMessage buffer is full.");
 
-            Array.Copy(value, 0, buffer, position, value.Length);
-            position += value.Length;
+            Array.Copy(value, 0, buffer, fposition, value.Length);
+            fposition += value.Length;
 
-            if (position > length)
-                length = position;
+            if (fposition > flength)
+                flength = fposition;
         }
 
         public void AddString(string value)
@@ -257,10 +257,10 @@ namespace OpenTibiaXna.OTServer.Engines
 
         public void AddPaddingBytes(int count)
         {
-            position += count;
+            fposition += count;
 
-            if (position > length)
-                length = position;
+            if (fposition > flength)
+                flength = fposition;
         }
 
         #endregion
@@ -269,13 +269,13 @@ namespace OpenTibiaXna.OTServer.Engines
 
         public byte PeekByte()
         {
-            return buffer[position];
+            return buffer[fposition];
         }
 
         public byte[] PeekBytes(int count)
         {
             byte[] t = new byte[count];
-            Array.Copy(buffer, position, t, 0, count);
+            Array.Copy(buffer, fposition, t, 0, count);
             return t;
         }
 
@@ -301,7 +301,7 @@ namespace OpenTibiaXna.OTServer.Engines
 
         public void ReplaceBytes(int index, byte[] value)
         {
-            if (length - index >= value.Length)
+            if (flength - index >= value.Length)
                 Array.Copy(value, 0, buffer, index, value.Length);
         }
 
@@ -311,9 +311,9 @@ namespace OpenTibiaXna.OTServer.Engines
 
         public void SkipBytes(int count)
         {
-            if (position + count > length)
+            if (fposition + count > flength)
                 throw new IndexOutOfRangeException("NetworkMessage SkipBytes() out of range.");
-            position += count;
+            fposition += count;
         }
 
         #endregion
@@ -322,17 +322,17 @@ namespace OpenTibiaXna.OTServer.Engines
 
         public void RSADecrypt()
         {
-            Rsa.Decrypt(ref buffer, position, length);
+            Rsa.Decrypt(ref buffer, fposition, flength);
         }
 
         public bool XteaDecrypt(uint[] key)
         {
-            return Xtea.Decrypt(ref buffer, ref length, 6, key);
+            return Xtea.Decrypt(ref buffer, ref flength, 6, key);
         }
 
         public bool XteaEncrypt(uint[] key)
         {
-            return Xtea.Encrypt(ref buffer, ref length, 6, key);
+            return Xtea.Encrypt(ref buffer, ref flength, 6, key);
         }
 
         #endregion
@@ -341,12 +341,12 @@ namespace OpenTibiaXna.OTServer.Engines
 
         public bool CheckAdler32()
         {
-            return AdlerChecksum.Generate(ref buffer, 6, length) == GetAdler32();
+            return AdlerChecksum.Generate(ref buffer, 6, flength) == GetAdler32();
         }
 
         public void InsertAdler32()
         {
-            Array.Copy(BitConverter.GetBytes(AdlerChecksum.Generate(ref buffer, 6, length)), 0, buffer, 2, 4);
+            Array.Copy(BitConverter.GetBytes(AdlerChecksum.Generate(ref buffer, 6, flength)), 0, buffer, 2, 4);
         }
 
         private uint GetAdler32()
@@ -360,12 +360,12 @@ namespace OpenTibiaXna.OTServer.Engines
 
         private void InsertPacketLength()
         {
-            Array.Copy(BitConverter.GetBytes((ushort)(length - 8)), 0, buffer, 6, 2);
+            Array.Copy(BitConverter.GetBytes((ushort)(flength - 8)), 0, buffer, 6, 2);
         }
 
         private void InsertTotalLength()
         {
-            Array.Copy(BitConverter.GetBytes((ushort)(length - 2)), 0, buffer, 0, 2);
+            Array.Copy(BitConverter.GetBytes((ushort)(flength - 2)), 0, buffer, 0, 2);
         }
 
         public bool PrepareToSendWithoutEncryption()
@@ -398,7 +398,7 @@ namespace OpenTibiaXna.OTServer.Engines
             if (!XteaDecrypt(xteaKey))
                 return false;
 
-            position = 8;
+            fposition = 8;
             return true;
         }
 

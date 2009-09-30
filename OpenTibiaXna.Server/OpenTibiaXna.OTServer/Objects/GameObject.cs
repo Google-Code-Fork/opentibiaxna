@@ -493,12 +493,12 @@ namespace OpenTibiaXna.OTServer.Objects
             }
 
             Player player = PlayerEngine.GetPlayerBy(int.Parse(connection.AccountId.ToString()), characterName);
-            if (player.PlayerObject.SavedLocation == null || Map.GetTile(player.PlayerObject.SavedLocation) == null)
+            if (player.SavedLocation == null || Map.GetTile(player.SavedLocation) == null)
             {
-                player.PlayerObject.SavedLocation = new LocationEngine(97, 205, 7);
+                player.SavedLocation = new LocationEngine(97, 205, 7);
             }
             //player.Id = 0x01000000 + (uint)random.Next(0xFFFFFF);
-            TileObject tile = Map.GetTile(player.PlayerObject.SavedLocation);
+            TileObject tile = Map.GetTile(player.SavedLocation);
             player.PlayerObject.Tile = tile;
             tile.Creatures.Add(player.PlayerObject);
             connection.Player = player.PlayerObject;
@@ -543,8 +543,7 @@ namespace OpenTibiaXna.OTServer.Objects
                 p.Connection.SendVipLogout(player.Id);
             }
 
-
-            Database.SavePlayerById(player);
+            GenericDatabase.SaveOrUpdate(PlayerEngine.GetPlayerBy(player.Id));
         }
 
         public void PlayerLookAt(PlayerObject player, ushort id, LocationEngine location, byte stackPosition)
@@ -559,7 +558,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
         public Account CheckAccount(Connection connection, string accountName, string password)
         {
-            Account account = Account.GetAccountBy(accountName, Hash.SHA256Hash(password));
+            Account account = AccountEngine.GetAccountBy(accountName, Hash.SHA256Hash(password));
 
             if (account == null)
             {

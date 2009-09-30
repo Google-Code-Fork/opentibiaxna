@@ -35,7 +35,7 @@ namespace OpenTibiaXna.OTServer.Objects
         {
             // FillTiles(4526);
             MapEngine.GetMapTiles(this);
-            MapEngine.GetMapItems(this);
+            //MapEngine.GetMapItems(this);
         }
 
         public TileObject GetTile(LocationEngine location)

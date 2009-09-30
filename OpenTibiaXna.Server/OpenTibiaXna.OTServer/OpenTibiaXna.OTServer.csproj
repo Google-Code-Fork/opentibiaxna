@@ -67,6 +67,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engines\AccountEngine.cs" />
+    <Compile Include="Engines\GameEngine.cs" />
+    <Compile Include="Logging\Exceptions.cs" />
+    <Compile Include="Logging\LoggingEngine.cs" />
+    <Compile Include="Engines\LoginServerEngine.cs" />
     <Compile Include="Engines\ServerEngine.cs" />
     <Compile Include="Entities\MapItem.cs" />
     <Compile Include="Entities\MSSQLEntities.Designer.cs">

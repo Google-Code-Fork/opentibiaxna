@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OpenTibiaXna.Helpers
+namespace OpenTibiaXna.OTServer.Helpers
 {
     public static class Extensions
     {
@@ -19,6 +19,8 @@ namespace OpenTibiaXna.Helpers
         {
             if (string.IsNullOrEmpty(instr))
                 return instr;
+            if (n <= 0)
+                n = 1;
 
             var result = new StringBuilder(instr.Length * n);
             return result.Insert(0, instr, n).ToString();

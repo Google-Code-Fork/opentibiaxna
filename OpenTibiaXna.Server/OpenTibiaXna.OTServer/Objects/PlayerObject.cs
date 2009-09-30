@@ -35,17 +35,5 @@ namespace OpenTibiaXna.OTServer.Objects
             ChannelList.Add(new Channel((ushort)ChatChannel.Help, "Help", 0));
             VipList = new Dictionary<uint, VipObject>(100);
         }
-
-        public PlayerObject(Gender gender, Vocation vocation)
-        {
-            Gender = gender;
-            Vocation = vocation;
-            ChannelList = new List<Channel>();
-            OpenedChannelList = new List<Channel>();
-            ChannelList.Add(new Channel((ushort)ChatChannel.Game, "Game-Chat", 0));
-            ChannelList.Add(new Channel((ushort)ChatChannel.RealLife, "RL-Chat", 0));
-            ChannelList.Add(new Channel((ushort)ChatChannel.Help, "Help", 0));
-            VipList = new Dictionary<uint, VipObject>(100);
-        }
     }
 }
