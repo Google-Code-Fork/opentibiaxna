@@ -377,7 +377,6 @@ namespace OpenTibiaXna.OTServer
 
     public enum ServerCommands
     {
-        None,
         Exit,
         ReloadScripts
     }

@@ -12,11 +12,23 @@ namespace OpenTibiaXna.OTServer.Entities
             return GenericDatabase.CurrentContext.CreateQuery<GameWorld>(typeof(GameWorld).Name).Include(typeof(Player).Name).ToList();
         }
 
+        /// <summary>
+        /// Returns only GameWorld without relations entities, use that when you want to use only accounts information.
+        /// </summary>
+        /// <param name="lazyMode">If TRUE no relations entities will be returned. Otherwise returns the same of GetAll() method.</param>
+        /// <returns></returns>
+        public static List<GameWorld> GetAll(bool lazyMode)
+        {
+            if (lazyMode)
+                return GenericDatabase.CurrentContext.CreateQuery<GameWorld>(typeof(GameWorld).Name).ToList();
+            return GetAll();
+        }
+
         public static GameWorld GetGameWorldBy(string gameWorldName)
         {
             GameWorld resultGameWorld = null;
 
-            var queryResult = from gameWorlds in GetAll()
+            var queryResult = from gameWorlds in GetAll(true)
                               where gameWorlds.GameWorldName.Equals(gameWorldName, StringComparison.InvariantCultureIgnoreCase)
                               select gameWorlds;
 

@@ -9,6 +9,7 @@ using OpenTibiaXna.OTServer.Packets.Client;
 using OpenTibiaXna.OTServer.Entities;
 using OpenTibiaXna.OTServer.Engines;
 using OpenTibiaXna.OTServer.Packets.Server;
+using OpenTibiaXna.OTServer.Logging;
 
 namespace OpenTibiaXna.OTServer.Objects
 {
@@ -69,7 +70,7 @@ namespace OpenTibiaXna.OTServer.Objects
                 new AsyncCallback(ClientReadFirstCallBack), null);
         }
 
-        public void GameListenerCallback(IAsyncResult ar)
+        public void  GameListenerCallback(IAsyncResult ar)
         {
             TcpListener gameListener = (TcpListener)ar.AsyncState;
             socket = gameListener.EndAcceptSocket(ar);
@@ -92,7 +93,7 @@ namespace OpenTibiaXna.OTServer.Objects
                 AccountPacket accountPacket = AccountPacket.Parse(inMessage);
                 xteaKey = accountPacket.XteaKey;
 
-                Account account = Account.GetAccountBy(accountPacket.Name, Hash.SHA256Hash(accountPacket.Password));
+                Account account = AccountEngine.GetAccountBy(accountPacket.Name, Hash.SHA256Hash(accountPacket.Password));
 
                 if (account != null)
                 {
@@ -290,7 +291,7 @@ namespace OpenTibiaXna.OTServer.Objects
                     Game.CreatureMove(Player,  Direction.NorthWest);
                     break;
                 default:
-                    ServerEngine.Log("Unhandled packet from " + Player.ToString() + ": " + type);
+                    LoggingEngine.LogError(new LogErrorException("Unhandled packet from " + Player.ToString() + ": " + type));
                     break;
             }
         }

@@ -27,7 +27,7 @@ namespace OpenTibiaXna.OTServer.Engines
 
         public static void GetMapItems(MapObject map)
         {
-            foreach (MapItem mapItem in MapItem.GetAllOrderByStackPosition())
+            foreach (MapItem mapItem in MapItem.GetAll().OrderBy(o => o.StackPosition))
             {
                 int x = mapItem.X - 32000;
                 int y = mapItem.Y - 32000;
@@ -43,27 +43,6 @@ namespace OpenTibiaXna.OTServer.Engines
                     tile.Items.Add(item);
                 }
             }
-
-            //SQLiteDataReader reader = selectMapItemsCommand.ExecuteReader(); 
-            // select * from MapItem order by StackPosition
-
-            //while (reader.Read())
-            //{
-            //    int x = reader.GetInt32(0) - 32000;
-            //    int y = reader.GetInt32(1) - 32000;
-            //    int z = reader.GetInt32(2);
-            //    ushort id = (ushort)reader.GetInt16(4);
-            //    byte extra = reader.GetByte(5);
-
-            //    Tile tile = map.GetTile(x, y, z);
-            //    if (tile != null)
-            //    {
-            //        ItemObject item = new ItemObject(id);
-            //        item.Extra = extra;
-            //        tile.Items.Add(item);
-            //    }
-            //}
-            //reader.Close();
         }
     }
 }
