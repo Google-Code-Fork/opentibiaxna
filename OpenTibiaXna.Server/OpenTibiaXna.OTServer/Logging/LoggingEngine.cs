@@ -16,7 +16,7 @@ namespace OpenTibiaXna.OTServer.Logging
 
         #region Methods
 
-        private static string GetLogHeader(string message)
+        private static string GetLogMessageHeader(string message)
         {
             logStartTick = System.Environment.TickCount;
             return String.Format("\n{0} {1}",
@@ -26,8 +26,11 @@ namespace OpenTibiaXna.OTServer.Logging
 
         public static void LogStart(string message)
         {
-            message = GetLogHeader(message);
+            message = GetLogMessageHeader(message);
             startMessageLength = message.Length + DateTime.Now.ToString().Length;
+
+            if (OnLog != null)
+                OnLog(message);
 
             if (OnLogStart != null)
                 OnLogStart(message);
@@ -44,13 +47,19 @@ namespace OpenTibiaXna.OTServer.Logging
                                             ".".Repeat(75 - startMessageLength),
                                             "Done",
                                             doneTime).ToString();
+            if (OnLog != null)
+                OnLog(message);
+
             if (OnLogDone != null)
                 OnLogDone(message);
         }
 
         public static void LogMessage(string message)
         {
-            message = GetLogHeader(String.Format("-> Message: {0}", message));
+            message = GetLogMessageHeader(String.Format("-> Message: {0}", message));
+
+            if (OnLog != null)
+                OnLog(message);
 
             if (OnLogMessage != null)
                 OnLogMessage(message);
@@ -58,7 +67,10 @@ namespace OpenTibiaXna.OTServer.Logging
 
         public static void LogError(LogErrorException exeption)
         {
-            exeption.UserMessage = GetLogHeader(String.Format("-> Error: {0}", exeption.Message));
+            exeption.UserMessage = GetLogMessageHeader(String.Format("-> Error: {0}", exeption.Message));
+
+            if (OnLog != null)
+                OnLog(exeption.UserMessage);
 
             if (OnLogError != null)
                 OnLogError(exeption);
@@ -79,6 +91,9 @@ namespace OpenTibiaXna.OTServer.Logging
 
         public delegate void OnLogMessageHandler(string message);
         public static event OnLogMessageHandler OnLogMessage;
+
+        public delegate void OnLogHandler(string message);
+        public static event OnLogHandler OnLog;
 
         #endregion
     }

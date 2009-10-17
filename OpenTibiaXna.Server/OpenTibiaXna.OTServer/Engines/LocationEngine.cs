@@ -5,15 +5,41 @@ namespace OpenTibiaXna.OTServer.Engines
 {
     public class LocationEngine
     {
-        public int X;
-        public int Y;
-        public int Z;
+
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Z { get; set; }
 
         public LocationEngine(int x, int y, int z)
         {
             X = x;
             Y = y;
             Z = z;
+        }
+
+        public LocationEngine(LocationEngine loc)
+        {
+            X = loc.X;
+            Y = loc.Y;
+            Z = loc.Z;
+        }
+
+        public override bool Equals(object other)
+        {
+            return other is LocationEngine && Equals((LocationEngine)other);
+        }
+
+        public bool Equals(LocationEngine other)
+        {
+            return other.X == X && other.Y == Y && other.Z == Z;
+        }
+
+        public override int GetHashCode()
+        {
+            ushort shortX = (ushort)X;
+            ushort shortY = (ushort)Y;
+            byte byteZ = (byte)Z;
+            return ((shortX << 3) + (shortY << 1) + byteZ).GetHashCode();
         }
 
         public override string ToString()

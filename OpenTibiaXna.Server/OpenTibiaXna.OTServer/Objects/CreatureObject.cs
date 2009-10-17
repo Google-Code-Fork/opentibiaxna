@@ -85,11 +85,28 @@ namespace OpenTibiaXna.OTServer.Objects
 
         #region Methods
 
+        public uint GetStepDuration()
+        {
+            uint duration = 0;
+            if (Tile.Ground != null)
+            {
+                uint groundSpeed = Tile.Ground.Info.Speed;
+                if (groundSpeed <= 0)
+                    groundSpeed = 100;
+                uint stepSpeed = Speed;
+                if (stepSpeed > 0)
+                {
+                    duration = (1000 * groundSpeed) / stepSpeed;
+                }
+            }
+
+            return duration; // TODO: * lastStepCost
+        }
+
         public override string GetLookAtString()
         {
             return "You see " + Name + ".";
         }
-
 
         public void Say(string text)
         {

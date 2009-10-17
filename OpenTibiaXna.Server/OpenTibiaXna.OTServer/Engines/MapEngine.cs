@@ -27,7 +27,9 @@ namespace OpenTibiaXna.OTServer.Engines
 
         public static void GetMapItems(MapObject map)
         {
-            foreach (MapItem mapItem in MapItem.GetAll().OrderBy(o => o.StackPosition))
+            List<MapItem> mapItens = MapItem.GetAll().OrderBy(o => o.StackPosition).ToList();
+
+            foreach (MapItem mapItem in mapItens)
             {
                 int x = mapItem.X - 32000;
                 int y = mapItem.Y - 32000;

@@ -14,6 +14,12 @@ namespace OpenTibiaXna.OTServer.Objects
         public List<ItemObject> Items { get; set; }
         public List<CreatureObject> Creatures { get; set; }
 
+        public bool IsProtectionZone = false;
+        public bool IsNoPvpZone = false;
+        public bool IsPvpZone = false;
+        public bool IsNoLogoutZone = false;
+        public bool IsRefreshZone = false;
+
         public TileObject()
         {
             Items = new List<ItemObject>();
@@ -22,6 +28,28 @@ namespace OpenTibiaXna.OTServer.Objects
         }
 
         public bool IsWalkable { get; set; }
+
+        public FloorChangeDirection FloorChange
+        {
+            get
+            {
+                if (Ground.Info.FloorChange != FloorChangeDirection.None)
+                {
+                    return Ground.Info.FloorChange;
+                }
+                else
+                {
+                    foreach (ItemObject item in Items)
+                    {
+                        if (item.Info.FloorChange != FloorChangeDirection.None)
+                        {
+                            return item.Info.FloorChange;
+                        }
+                    }
+                }
+                return FloorChangeDirection.None;
+            }
+        }
 
         public IEnumerable<ItemObject> GetTopItems()
         {
@@ -100,9 +128,14 @@ namespace OpenTibiaXna.OTServer.Objects
 
             if (Items.Count > 0)
             {
-                // check all top items
-                // or increment by top item count
-                n += GetTopItems().Count();
+                foreach (ItemObject item in GetTopItems())
+                {
+                    ++n;
+                    if (thing == item)
+                    {
+                        return (byte)n;
+                    }
+                }
             }
 
             if (Creatures.Count > 0)
@@ -119,7 +152,14 @@ namespace OpenTibiaXna.OTServer.Objects
 
             if (Items.Count > 0)
             {
-                // check all down items
+                foreach (ItemObject item in GetDownItems())
+                {
+                    ++n;
+                    if (thing == item)
+                    {
+                        return (byte)n;
+                    }
+                }
             }
 
             throw new Exception("Thing not found in tile.");

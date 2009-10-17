@@ -247,12 +247,17 @@ namespace OpenTibiaXna.OTServer.Engines
 
         public void AddItem(ItemObject item)
         {
-            AddUInt16(item.Id);
+            AddUInt16(item.Info.SpriteId);
 
-            if (item.Data.HasExtraByte)
+            if (item.Info.IsStackable || item.Info.HasClientCharges)
             {
                 AddByte(item.Extra);
             }
+            // TODO: fluids
+            //else if (item.Info.isSplash || item.Info.IsFluidContainer)
+            //{
+
+            //}
         }
 
         public void AddPaddingBytes(int count)

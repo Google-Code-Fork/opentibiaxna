@@ -39,11 +39,11 @@ namespace OpenTibiaXna.OTServer.Entities
 
         public PlayerObject PlayerObject { get; set; }
 
-        public Connection Connection { get; set; }
+        public ConnectionEngine Connection { get; set; }
         public LocationEngine SavedLocation { get; set; }
         public List<Channel> ChannelList { get; set; }
         public List<Channel> OpenedChannelList { get; set; }
-        public FightModes FightMode { get; set; }
+        public FightMode FightMode { get; set; }
         public bool ChaseMode { get; set; }
         public bool SafeMode { get; set; }
         public Dictionary<uint, VipObject> VipList { get; set; }

@@ -11,7 +11,7 @@ namespace OpenTibiaXna.OTServer.Packets.Server
     {
         public static void Add
         (
-            Connection connection, 
+            ConnectionEngine connection, 
             NetworkMessageEngine outMessage, 
             LocationEngine fromLocation,
             byte fromStackPosition,

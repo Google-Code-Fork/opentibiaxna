@@ -2,30 +2,6 @@
 
 namespace OpenTibiaXna.OTServer
 {
-    #region Scripting
-
-    public enum EventType : byte
-    {
-        //Items
-        OnItemUse = 0x01,
-        OnItemLook = 0x02,
-        OnItemRelocate = 0x03,
-        OnItemDrop = 0x04,
-        OnItemPickup = 0x05,
-        OnItemEquip = 0x06,
-        OnIemUnEquip = 0x07,
-        //Creatures
-        OnCreatureLook = 0x08,
-        OnCreatureTarget = 0x09,
-        OnCreatureAttacked = 0x0A,
-        OnCreatureCreated = 0x0B, //Monsters and NPCs only
-        //player
-        OnPlayerLogin =0x98,
-        OnPlayerSay = 0x99
-    }
-
-    #endregion
-
     #region Packets
 
     public enum ServerPacketType : byte
@@ -339,7 +315,7 @@ namespace OpenTibiaXna.OTServer
         Black = 5
     }
 
-    public enum Party
+    public enum Party : byte
     {
         None = 0,
         Host = 1,
@@ -349,13 +325,15 @@ namespace OpenTibiaXna.OTServer
         MemberSharedExp = 5,
         LeaderSharedExp = 6,
         MemberSharedExpInactive = 7,
-        LeaderSharedExpInactive = 8
+        LeaderSharedExpInactive = 8,
+        MemberNoSharedExp = 9,
+        LeaderNoSharedExp = 10
     }
 
-    public enum Gender
+    public enum Gender : byte
     {
-        Male = 0x01,
-        Female = 0x02
+        Male,
+        Female
     }
 
     // TODO: dynamic?
@@ -364,11 +342,173 @@ namespace OpenTibiaXna.OTServer
         None
     }
 
-    public enum FightModes
+    public enum FightMode : byte
     {
         FullAttack = 1,
         Balanced = 2,
         FullDefense = 3
+    }
+
+    public enum FluidColor : byte
+    {
+        Empty = 0,
+        Blue = 1,
+        Red = 2,
+        Brown = 3,
+        Green = 4,
+        Yellow = 5,
+        White = 6,
+        Purple = 7
+    }
+
+    public enum Fluid : byte
+    {
+        Empty,
+        Water,
+        Blood,
+        Beer,
+        Slime,
+        Lemonade,
+        Milk,
+        Mana,
+        Life,
+        Oil,
+        Urine,
+        CoconutMilk,
+        Wine,
+        Mud,
+        FruitJuice,
+        Lava,
+        Rum,
+        Swamp
+    }
+
+    public enum WeaponType : byte
+    {
+        None,
+        Sword,
+        Club,
+        Axe,
+        Shield,
+        Dist,
+        Wand,
+        Ammo
+    }
+
+    public enum AmmoType : byte
+    {
+        None = 0,
+        Bolt,
+        Arrow,
+        Spear,
+        ThrowingStar,
+        ThrowingKnife,
+        Stone,
+        Snowball
+    }
+
+    public enum SlotType
+    {
+        None,
+        Head,
+        Neck,
+        Back,
+        Armor,
+        Right,
+        Left,
+        Legs,
+        Feet,
+        Ring,
+        Ammo,
+        Depot,
+        TwoHanded
+    }
+
+    #endregion
+
+    #region Items
+
+    // TODO: Merge group and type
+    public enum ItemGroup
+    {
+        None = 0,
+        Ground,
+        Container,
+        Weapon,		/*deprecated*/
+        Ammunition,	/*deprecated*/
+        Armor,		/*deprecated*/
+        Charges,
+        Teleport,	/*deprecated*/
+        MagicField,	/*deprecated*/
+        Writeable,	/*deprecated*/
+        Key,			/*deprecated*/
+        Splash,
+        Fluid,
+        Door,		/*deprecated*/
+        Deprecated
+    }
+
+    public enum ItemType
+    {
+        Normal,
+        Container,
+        Key,
+        MagicField,
+        Depot,
+        Mailbox,
+        TrashHolder,
+        Teleport,
+        Door,
+        Bed
+    }
+
+    public enum FloorChangeDirection
+    {
+        None,
+        Down,
+        North,
+        South,
+        West,
+        East
+    }
+
+    public enum CorpseType
+    {
+        None,
+        Venom,
+        Blood,
+        Undead,
+        Fire,
+        Energy
+    }
+
+    [FlagsAttribute]
+    public enum ItemFlags : uint
+    {
+        BlocksSolid = 1,
+        BlocksProjectile = 2,
+        BlocksPathFinding = 4,
+        HasHeight = 8,
+        Useable = 16,
+        Pickupable = 32,
+        Moveable = 64,
+        Stackable = 128,
+        FloorChangeDown = 256,
+        FloorChangeNorth = 512,
+        FloorChangeEast = 1024,
+        FloorChangeSouth = 2048,
+        FloorChangeWest = 4096,
+        AlwaysOnTop = 8192,
+        Readable = 16384,
+        Rotatable = 32768,
+        Hangable = 65536,
+        Vertical = 131072,
+        Horizontal = 262144,
+        CannotDecay = 524288,
+        AllowDistanceRead = 1048576,
+        Unused = 2097152,
+        ClientCharges = 4194304,
+        LookThrough = 8388608
     }
 
     #endregion
@@ -377,6 +517,7 @@ namespace OpenTibiaXna.OTServer
 
     public enum ServerCommands
     {
+        None,
         Exit,
         ReloadScripts
     }

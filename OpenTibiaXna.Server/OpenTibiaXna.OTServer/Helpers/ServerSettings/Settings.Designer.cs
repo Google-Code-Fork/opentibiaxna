@@ -61,15 +61,6 @@ namespace OpenTibiaXna.OTServer.Helpers.ServerSettings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DatabaseType.
-        /// </summary>
-        internal static string DatabaseType {
-            get {
-                return ResourceManager.GetString("DatabaseType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to GameServerPort.
         /// </summary>
         internal static string GameServerPort {

@@ -4,19 +4,18 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MSSQLModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2006/04/edm/ssdl">
-        <EntityContainer Name="MSSQLModelStoreContainer">
-          <EntitySet Name="Account" EntityType="MSSQLModel.Store.Account" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="GameWorld" EntityType="MSSQLModel.Store.GameWorld" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Item" EntityType="MSSQLModel.Store.Item" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="MapItem" EntityType="MSSQLModel.Store.MapItem" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="MapTile" EntityType="MSSQLModel.Store.MapTile" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Player" EntityType="MSSQLModel.Store.Player" store:Type="Tables" Schema="dbo" />
-          <AssociationSet Name="FK_Player_AccountId_Account_AccountId" Association="MSSQLModel.Store.FK_Player_AccountId_Account_AccountId">
+    <Schema Namespace="OTXModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2006/04/edm/ssdl">
+        <EntityContainer Name="OTXModelStoreContainer">
+          <EntitySet Name="Account" EntityType="OTXModel.Store.Account" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GameWorld" EntityType="OTXModel.Store.GameWorld" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="MapItem" EntityType="OTXModel.Store.MapItem" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="MapTile" EntityType="OTXModel.Store.MapTile" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Player" EntityType="OTXModel.Store.Player" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Player_AccountId_Account_AccountId" Association="OTXModel.Store.FK_Player_AccountId_Account_AccountId">
             <End Role="Account" EntitySet="Account" />
             <End Role="Player" EntitySet="Player" />
           </AssociationSet>
-          <AssociationSet Name="FK_Player_GameWorldId_GameWorld_GameWorldId" Association="MSSQLModel.Store.FK_Player_GameWorldId_GameWorld_GameWorldId">
+          <AssociationSet Name="FK_Player_GameWorldId_GameWorld_GameWorldId" Association="OTXModel.Store.FK_Player_GameWorldId_GameWorld_GameWorldId">
             <End Role="GameWorld" EntitySet="GameWorld" />
             <End Role="Player" EntitySet="Player" />
           </AssociationSet>
@@ -37,13 +36,6 @@
           <Property Name="GameWorldName" Type="varchar" Nullable="false" MaxLength="25" />
           <Property Name="GameWorldIp" Type="binary" Nullable="false" MaxLength="4" />
           <Property Name="GameWorldPort" Type="smallint" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Item">
-          <Key>
-            <PropertyRef Name="ItemId" />
-          </Key>
-          <Property Name="ItemId" Type="int" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="MapItem">
           <Key>
@@ -98,8 +90,8 @@
           <Property Name="Direction" Type="smallint" />
         </EntityType>
         <Association Name="FK_Player_AccountId_Account_AccountId">
-          <End Role="Account" Type="MSSQLModel.Store.Account" Multiplicity="1" />
-          <End Role="Player" Type="MSSQLModel.Store.Player" Multiplicity="*" />
+          <End Role="Account" Type="OTXModel.Store.Account" Multiplicity="1" />
+          <End Role="Player" Type="OTXModel.Store.Player" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Account">
               <PropertyRef Name="AccountId" />
@@ -110,8 +102,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Player_GameWorldId_GameWorld_GameWorldId">
-          <End Role="GameWorld" Type="MSSQLModel.Store.GameWorld" Multiplicity="1" />
-          <End Role="Player" Type="MSSQLModel.Store.Player" Multiplicity="*" />
+          <End Role="GameWorld" Type="OTXModel.Store.GameWorld" Multiplicity="1" />
+          <End Role="Player" Type="OTXModel.Store.Player" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="GameWorld">
               <PropertyRef Name="GameWorldId" />
@@ -121,23 +113,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="MSSQLModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2006/04/edm">
-        <EntityContainer Name="MSSQLEntities">
-          <EntitySet Name="Account" EntityType="MSSQLModel.Account" />
-          <EntitySet Name="GameWorld" EntityType="MSSQLModel.GameWorld" />
-          <EntitySet Name="Item" EntityType="MSSQLModel.Item" />
-          <EntitySet Name="MapItem" EntityType="MSSQLModel.MapItem" />
-          <EntitySet Name="MapTile" EntityType="MSSQLModel.MapTile" />
-          <EntitySet Name="Player" EntityType="MSSQLModel.Player" />
-          <AssociationSet Name="FK_Player_AccountId_Account_AccountId" Association="MSSQLModel.FK_Player_AccountId_Account_AccountId">
+      <Schema Namespace="OTXModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2006/04/edm">
+        <EntityContainer Name="OTXEntities">
+          <EntitySet Name="Account" EntityType="OTXModel.Account" />
+          <EntitySet Name="GameWorld" EntityType="OTXModel.GameWorld" />
+          <EntitySet Name="MapItem" EntityType="OTXModel.MapItem" />
+          <EntitySet Name="MapTile" EntityType="OTXModel.MapTile" />
+          <EntitySet Name="Player" EntityType="OTXModel.Player" />
+          <AssociationSet Name="FK_Player_AccountId_Account_AccountId" Association="OTXModel.FK_Player_AccountId_Account_AccountId">
             <End Role="Account" EntitySet="Account" />
             <End Role="Player" EntitySet="Player" />
           </AssociationSet>
-          <AssociationSet Name="FK_Player_GameWorldId_GameWorld_GameWorldId" Association="MSSQLModel.FK_Player_GameWorldId_GameWorld_GameWorldId">
+          <AssociationSet Name="FK_Player_GameWorldId_GameWorld_GameWorldId" Association="OTXModel.FK_Player_GameWorldId_GameWorld_GameWorldId">
             <End Role="GameWorld" EntitySet="GameWorld" />
             <End Role="Player" EntitySet="Player" />
           </AssociationSet>
@@ -149,7 +139,7 @@
           <Property Name="AccountId" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
           <Property Name="Password" Type="String" Nullable="false" MaxLength="256" Unicode="false" FixedLength="false" />
-          <NavigationProperty Name="Player" Relationship="MSSQLModel.FK_Player_AccountId_Account_AccountId" FromRole="Account" ToRole="Player" />
+          <NavigationProperty Name="Player" Relationship="OTXModel.FK_Player_AccountId_Account_AccountId" FromRole="Account" ToRole="Player" />
         </EntityType>
         <EntityType Name="GameWorld">
           <Key>
@@ -159,14 +149,7 @@
           <Property Name="GameWorldName" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
           <Property Name="GameWorldIp" Type="Binary" Nullable="false" MaxLength="4" FixedLength="true" />
           <Property Name="GameWorldPort" Type="Int16" Nullable="false" />
-          <NavigationProperty Name="Player" Relationship="MSSQLModel.FK_Player_GameWorldId_GameWorld_GameWorldId" FromRole="GameWorld" ToRole="Player" />
-        </EntityType>
-        <EntityType Name="Item">
-          <Key>
-            <PropertyRef Name="ItemId" />
-          </Key>
-          <Property Name="ItemId" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Player" Relationship="OTXModel.FK_Player_GameWorldId_GameWorld_GameWorldId" FromRole="GameWorld" ToRole="Player" />
         </EntityType>
         <EntityType Name="MapItem">
           <Key>
@@ -217,25 +200,25 @@
           <Property Name="LocationY" Type="Int16" />
           <Property Name="LocationZ" Type="Int16" />
           <Property Name="Direction" Type="Int16" />
-          <NavigationProperty Name="Account" Relationship="MSSQLModel.FK_Player_AccountId_Account_AccountId" FromRole="Player" ToRole="Account" />
-          <NavigationProperty Name="GameWorld" Relationship="MSSQLModel.FK_Player_GameWorldId_GameWorld_GameWorldId" FromRole="Player" ToRole="GameWorld" />
+          <NavigationProperty Name="Account" Relationship="OTXModel.FK_Player_AccountId_Account_AccountId" FromRole="Player" ToRole="Account" />
+          <NavigationProperty Name="GameWorld" Relationship="OTXModel.FK_Player_GameWorldId_GameWorld_GameWorldId" FromRole="Player" ToRole="GameWorld" />
         </EntityType>
         <Association Name="FK_Player_AccountId_Account_AccountId">
-          <End Role="Account" Type="MSSQLModel.Account" Multiplicity="1" />
-          <End Role="Player" Type="MSSQLModel.Player" Multiplicity="*" />
+          <End Role="Account" Type="OTXModel.Account" Multiplicity="1" />
+          <End Role="Player" Type="OTXModel.Player" Multiplicity="*" />
         </Association>
         <Association Name="FK_Player_GameWorldId_GameWorld_GameWorldId">
-          <End Role="GameWorld" Type="MSSQLModel.GameWorld" Multiplicity="1" />
-          <End Role="Player" Type="MSSQLModel.Player" Multiplicity="*" />
+          <End Role="GameWorld" Type="OTXModel.GameWorld" Multiplicity="1" />
+          <End Role="Player" Type="OTXModel.Player" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="urn:schemas-microsoft-com:windows:storage:mapping:CS">
-        <EntityContainerMapping StorageEntityContainer="MSSQLModelStoreContainer" CdmEntityContainer="MSSQLEntities">
+        <EntityContainerMapping StorageEntityContainer="OTXModelStoreContainer" CdmEntityContainer="OTXEntities">
           <EntitySetMapping Name="Account">
-            <EntityTypeMapping TypeName="IsTypeOf(MSSQLModel.Account)">
+            <EntityTypeMapping TypeName="IsTypeOf(OTXModel.Account)">
               <MappingFragment StoreEntitySet="Account">
                 <ScalarProperty Name="AccountId" ColumnName="AccountId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -244,7 +227,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GameWorld">
-            <EntityTypeMapping TypeName="IsTypeOf(MSSQLModel.GameWorld)">
+            <EntityTypeMapping TypeName="IsTypeOf(OTXModel.GameWorld)">
               <MappingFragment StoreEntitySet="GameWorld">
                 <ScalarProperty Name="GameWorldId" ColumnName="GameWorldId" />
                 <ScalarProperty Name="GameWorldName" ColumnName="GameWorldName" />
@@ -253,16 +236,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Item">
-            <EntityTypeMapping TypeName="IsTypeOf(MSSQLModel.Item)">
-              <MappingFragment StoreEntitySet="Item">
-                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="MapItem">
-            <EntityTypeMapping TypeName="IsTypeOf(MSSQLModel.MapItem)">
+            <EntityTypeMapping TypeName="IsTypeOf(OTXModel.MapItem)">
               <MappingFragment StoreEntitySet="MapItem">
                 <ScalarProperty Name="X" ColumnName="X" />
                 <ScalarProperty Name="Y" ColumnName="Y" />
@@ -274,7 +249,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="MapTile">
-            <EntityTypeMapping TypeName="IsTypeOf(MSSQLModel.MapTile)">
+            <EntityTypeMapping TypeName="IsTypeOf(OTXModel.MapTile)">
               <MappingFragment StoreEntitySet="MapTile">
                 <ScalarProperty Name="X" ColumnName="X" />
                 <ScalarProperty Name="Y" ColumnName="Y" />
@@ -284,7 +259,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Player">
-            <EntityTypeMapping TypeName="IsTypeOf(MSSQLModel.Player)">
+            <EntityTypeMapping TypeName="IsTypeOf(OTXModel.Player)">
               <MappingFragment StoreEntitySet="Player">
                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -309,7 +284,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="FK_Player_AccountId_Account_AccountId" TypeName="MSSQLModel.FK_Player_AccountId_Account_AccountId" StoreEntitySet="Player">
+          <AssociationSetMapping Name="FK_Player_AccountId_Account_AccountId" TypeName="OTXModel.FK_Player_AccountId_Account_AccountId" StoreEntitySet="Player">
             <EndProperty Name="Account">
               <ScalarProperty Name="AccountId" ColumnName="AccountId" />
             </EndProperty>
@@ -317,7 +292,7 @@
               <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
             </EndProperty>
           </AssociationSetMapping>
-          <AssociationSetMapping Name="FK_Player_GameWorldId_GameWorld_GameWorldId" TypeName="MSSQLModel.FK_Player_GameWorldId_GameWorld_GameWorldId" StoreEntitySet="Player">
+          <AssociationSetMapping Name="FK_Player_GameWorldId_GameWorld_GameWorldId" TypeName="OTXModel.FK_Player_GameWorldId_GameWorld_GameWorldId" StoreEntitySet="Player">
             <EndProperty Name="GameWorld">
               <ScalarProperty Name="GameWorldId" ColumnName="GameWorldId" />
             </EndProperty>
@@ -344,18 +319,17 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram Name="MSSQLEntities">
-        <EntityTypeShape EntityType="MSSQLModel.Account" Width="1.5" PointX="0.75" PointY="3.875" Height="1.5923063151041665" IsExpanded="true" />
-        <EntityTypeShape EntityType="MSSQLModel.GameWorld" Width="1.5" PointX="0.75" PointY="0.75" Height="1.7566536458333335" IsExpanded="true" />
-        <EntityTypeShape EntityType="MSSQLModel.Item" Width="1.5" PointX="5.75" PointY="2" Height="1.2636116536458335" IsExpanded="true" />
-        <EntityTypeShape EntityType="MSSQLModel.MapItem" Width="1.5" PointX="5.75" PointY="5" Height="1.9210009765624996" IsExpanded="true" />
-        <EntityTypeShape EntityType="MSSQLModel.MapTile" Width="1.5" PointX="0.75" PointY="8" Height="1.5923063151041674" IsExpanded="true" />
-        <EntityTypeShape EntityType="MSSQLModel.Player" Width="1.5" PointX="3" PointY="2.375" Height="4.5505582682291656" IsExpanded="true" />
-        <AssociationConnector Association="MSSQLModel.FK_Player_AccountId_Account_AccountId" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="4.6711531575520837" />
-          <ConnectorPoint PointX="3" PointY="4.6711531575520837" /></AssociationConnector>
-        <AssociationConnector Association="MSSQLModel.FK_Player_GameWorldId_GameWorld_GameWorldId" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="1.5624995" />
-          <ConnectorPoint PointX="3.75" PointY="1.5624995" />
-          <ConnectorPoint PointX="3.75" PointY="2.375" /></AssociationConnector></Diagram></edmx:Diagrams>
+        <EntityTypeShape EntityType="OTXModel.Account" Width="1.5" PointX="0.75" PointY="3.875" Height="1.5923063151041665" IsExpanded="true" />
+        <EntityTypeShape EntityType="OTXModel.GameWorld" Width="1.5" PointX="0.75" PointY="0.75" Height="1.7566536458333335" IsExpanded="true" />
+        <EntityTypeShape EntityType="OTXModel.MapItem" Width="1.5" PointX="5.125" PointY="0.5" Height="1.9210009765624996" IsExpanded="true" />
+        <EntityTypeShape EntityType="OTXModel.MapTile" Width="1.5" PointX="5.125" PointY="2.875" Height="1.5923063151041674" IsExpanded="true" />
+        <EntityTypeShape EntityType="OTXModel.Player" Width="1.5" PointX="3" PointY="0.625" Height="4.5505582682291656" IsExpanded="true" />
+        <AssociationConnector Association="OTXModel.FK_Player_AccountId_Account_AccountId" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="4.5252791341145828" />
+          <ConnectorPoint PointX="3" PointY="4.5252791341145828" /></AssociationConnector>
+        <AssociationConnector Association="OTXModel.FK_Player_GameWorldId_GameWorld_GameWorldId" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="1.6283268229166668" />
+          <ConnectorPoint PointX="3" PointY="1.6283268229166668" />
+          </AssociationConnector></Diagram></edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

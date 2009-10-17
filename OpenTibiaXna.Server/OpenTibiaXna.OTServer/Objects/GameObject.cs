@@ -10,7 +10,6 @@ using OpenTibiaXna.OTServer.Entities;
 using OpenTibiaXna.Helpers;
 using OpenTibiaXna.OTServer.Engines;
 using OpenTibiaXna.OTServer.Objects;
-using OpenTibiaXna.OTServer.LuaScripter;
 
 namespace OpenTibiaXna.OTServer.Objects
 {
@@ -26,7 +25,7 @@ namespace OpenTibiaXna.OTServer.Objects
         #region Properties
 
         public MapObject Map { get; private set; }
-        public Scripter Scripter { get; private set; }
+        //public Scripter Scripter { get; private set; }
 
         #endregion
 
@@ -92,7 +91,7 @@ namespace OpenTibiaXna.OTServer.Objects
         public delegate bool VipRemoveHandler(PlayerObject player, uint vipId);
         public VipRemoveHandler BeforeVipRemove;
 
-        public delegate bool BeforeLoginHandler(Connection connection, string playerName);
+        public delegate bool BeforeLoginHandler(ConnectionEngine connection, string playerName);
         public BeforeLoginHandler BeforeLogin;
 
         public delegate void AfterLoginHandler(PlayerObject player);
@@ -121,7 +120,7 @@ namespace OpenTibiaXna.OTServer.Objects
         public GameObject()
         {
             Map = new MapObject();
-            Scripter = new Scripter();
+            //Scripter = new Scripter();
         }
 
         #endregion
@@ -475,7 +474,7 @@ namespace OpenTibiaXna.OTServer.Objects
             }
         }
 
-        public void ProcessLogin(Connection connection, string characterName)
+        public void ProcessLogin(ConnectionEngine connection, string characterName)
         {
             if (BeforeLogin != null)
             {
@@ -493,6 +492,7 @@ namespace OpenTibiaXna.OTServer.Objects
             }
 
             Player player = PlayerEngine.GetPlayerBy(int.Parse(connection.AccountId.ToString()), characterName);
+            connection.Player = player;
             if (player.SavedLocation == null || Map.GetTile(player.SavedLocation) == null)
             {
                 player.SavedLocation = new LocationEngine(97, 205, 7);
@@ -501,49 +501,56 @@ namespace OpenTibiaXna.OTServer.Objects
             TileObject tile = Map.GetTile(player.SavedLocation);
             player.PlayerObject.Tile = tile;
             tile.Creatures.Add(player.PlayerObject);
-            connection.Player = player.PlayerObject;
+            connection.PlayerObject = player.PlayerObject;
             player.PlayerObject.Connection = connection;
             player.PlayerObject.Game = this;
+            player.PlayerObject.Id = (uint)1073741827;
+            player.PlayerObject.Name = player.Name;
+            player.PlayerObject.MaxHealth = 100;
+            player.PlayerObject.MaxMana = 100;
+            player.PlayerObject.Outfit = new OutfitObject("", 128, 0);
 
             PlayerLogin(player.PlayerObject);
         }
 
-        public void PlayerLogout(PlayerObject player)
+        public void PlayerLogout(Player player)
         {
+            PlayerObject playerObject = player.PlayerObject;
+
             if (BeforeLogout != null)
             {
                 bool forward = true;
                 foreach (Delegate del in BeforeLogout.GetInvocationList())
                 {
                     BeforeLogoutHandler subscriber = (BeforeLogoutHandler)del;
-                    forward &= (bool)subscriber(player);
+                    forward &= (bool)subscriber(playerObject);
                 }
                 if (!forward) return;
             }
             // TODO: Make sure the player can logout
-            player.Connection.Close();
+            playerObject.Connection.Close();
             if (AfterLogout != null)
             {
-                AfterLogout(player);
+                AfterLogout(playerObject);
             }
             //should be composite packet for players that are spectators AND vips?
-            var spectators = GetSpectatorPlayers(player.Tile.Location).Where(s => s != player);
+            var spectators = GetSpectatorPlayers(playerObject.Tile.Location).Where(s => s != playerObject);
             foreach (var spectator in spectators)
             {
-                spectator.Connection.SendCreatureLogout(player);
+                spectator.Connection.SendCreatureLogout(playerObject);
             }
 
-            player.Tile.Creatures.Remove(player);
-            RemoveCreature(player);
+            playerObject.Tile.Creatures.Remove(playerObject);
+            RemoveCreature(playerObject);
 
             //maybe player object should have a list of other players that have added it to their vips
-            foreach (PlayerObject p in GetPlayers().Where(b => b.VipList.ContainsKey(player.Id)))
+            foreach (PlayerObject p in GetPlayers().Where(b => b.VipList.ContainsKey(playerObject.Id)))
             {
-                p.VipList[player.Id].LoggedIn = false;
-                p.Connection.SendVipLogout(player.Id);
+                p.VipList[playerObject.Id].LoggedIn = false;
+                p.Connection.SendVipLogout(playerObject.Id);
             }
 
-            GenericDatabase.SaveOrUpdate(PlayerEngine.GetPlayerBy(player.Id));
+            GenericDatabase.SaveOrUpdate(player);
         }
 
         public void PlayerLookAt(PlayerObject player, ushort id, LocationEngine location, byte stackPosition)
@@ -556,7 +563,7 @@ namespace OpenTibiaXna.OTServer.Objects
             }
         }
 
-        public Account CheckAccount(Connection connection, string accountName, string password)
+        public Account CheckAccount(ConnectionEngine connection, string accountName, string password)
         {
             Account account = AccountEngine.GetAccountBy(accountName, Hash.SHA256Hash(password));
 

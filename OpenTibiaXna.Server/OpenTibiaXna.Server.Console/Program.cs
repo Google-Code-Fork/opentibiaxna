@@ -12,40 +12,46 @@ namespace OpenTibiaXna.OTServer.ConsoleApp
     {
         static void Main(string[] args)
         {
-            LoggingEngine.OnLogError += new LoggingEngine.OnLogErrorHandler(LoggingEngine_OnLogError);
-            LoggingEngine.OnLogMessage += new LoggingEngine.OnLogMessageHandler(LoggingEngine_OnLogMessage);
-            LoggingEngine.OnLogStart += new LoggingEngine.OnLogStartHandler(LoggingEngine_OnLogStart);
-            LoggingEngine.OnLogDone += new LoggingEngine.OnLogDoneHandler(LoggingEngine_OnLogDone);
+            #region LogginEngine Events
+
+            // Sample: Simple logging without colors
+            // LoggingEngine.OnLog += message => Console.Write(message);
+
+            // Sample: Colorfull logging
+            LoggingEngine.OnLogStart += message => Console.Write(message);
+
+            LoggingEngine.OnLogError += exception =>
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write(exception.UserMessage);
+                Console.ResetColor();
+            };
+
+            LoggingEngine.OnLogMessage += message =>
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(message);
+                Console.ResetColor();
+            };
+
+            LoggingEngine.OnLogDone += message =>
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(message);
+                Console.ResetColor();
+            };
+
+            #endregion
 
             ServerEngine.Run();
+            Console.WriteLine();
 
-            Console.ReadLine();
-        }
-
-        static void LoggingEngine_OnLogError(LogErrorException exception)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write(exception.UserMessage);
-            Console.ResetColor();
-        }
-
-        static void LoggingEngine_OnLogDone(string message)
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write(message);
-            Console.ResetColor();
-        }
-
-        static void LoggingEngine_OnLogStart(string message)
-        {
-            Console.Write(message);
-        }
-
-        static void LoggingEngine_OnLogMessage(string message)
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write(message);
-            Console.ResetColor();
+            bool exit = false;
+            while (!exit)
+            {
+                if (Console.ReadLine().ToLower().Equals("exit"))
+                    exit = true;
+            }
         }
     }
 }

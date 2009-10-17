@@ -12,6 +12,7 @@ using OpenTibiaXna.OTServer.Scripting;
 using OpenTibiaXna.Helpers;
 using OpenTibiaXna.OTServer.Helpers;
 using OpenTibiaXna.OTServer.Logging;
+using OpenTibiaXna.OTServer.OpenTibia;
 
 namespace OpenTibiaXna.OTServer.Engines
 {
@@ -27,11 +28,7 @@ namespace OpenTibiaXna.OTServer.Engines
             LoginServerEngine loginServerEngine = LoginServerEngine.Instance;
 
             Game = new GameObject();
-            Connections = new List<Connection>();
-
-            LoggingEngine.LogStart("Initializing Database");
-            DatabaseEngine.SetDatabaseType();
-            LoggingEngine.LogDone();
+            Connections = new List<ConnectionEngine>();
 
             LoggingEngine.LogStart("Initializing Multi-World System");
             gameWorld = GameWorldEngine.Initialize();
@@ -42,7 +39,8 @@ namespace OpenTibiaXna.OTServer.Engines
             LoggingEngine.LogDone();
 
             LoggingEngine.LogStart("Loading items.xml");
-            ItemObject.LoadItemsXml();
+            ItemInfo.LoadItemsOtb(@"Data\items.otb");
+            ItemInfo.LoadItemsXml(@"Data\items.xml");
             LoggingEngine.LogDone();
 
             LoggingEngine.LogStart("Loading map");
@@ -63,39 +61,14 @@ namespace OpenTibiaXna.OTServer.Engines
             clientGameListener.Start();
             clientGameListener.BeginAcceptSocket(new AsyncCallback(GameListenerCallback), clientGameListener);
             LoggingEngine.LogDone();
-            //}
-            //catch (Exception e)
-            //{
-            //    LogError(e.ToString());
-            //}
 
-            while (true)
-            {
-                bool exit = false;
-
-                switch (ServerCommand)
-                {
-                    case ServerCommands.Exit:
-                        exit = true;
-                        break;
-                    case ServerCommands.ReloadScripts:
-                        ScriptManager.ReloadAllScripts(Game);
-                        break;
-                    default:
-                        LoggingEngine.LogError(new LogErrorException("Unknow server command.")); 
-                        break;
-                }
-
-                if (exit) break;
-            }
-
-            Connections.ForEach(c => c.Close());
+            //Connections.ForEach(c => c.Close());
             //clientGameListener.Stop();
         }
 
         private static void GameListenerCallback(IAsyncResult ar)
         {
-            Connection connection = new Connection(Game);
+            ConnectionEngine connection = new ConnectionEngine(Game);
             connection.GameListenerCallback(ar);
             Connections.Add(connection);
 
@@ -105,7 +78,7 @@ namespace OpenTibiaXna.OTServer.Engines
 
         public static GameObject Game { get; set; }
 
-        public static List<Connection> Connections { get; set; }
+        public static List<ConnectionEngine> Connections { get; set; }
 
         public static ServerCommands ServerCommand { get; set; }
     }

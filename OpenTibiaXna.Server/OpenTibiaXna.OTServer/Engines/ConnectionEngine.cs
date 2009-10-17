@@ -10,10 +10,12 @@ using OpenTibiaXna.OTServer.Entities;
 using OpenTibiaXna.OTServer.Engines;
 using OpenTibiaXna.OTServer.Packets.Server;
 using OpenTibiaXna.OTServer.Logging;
+using OpenTibiaXna.OTServer.Objects;
+using OpenTibiaXna.OTServer.Helpers;
 
-namespace OpenTibiaXna.OTServer.Objects
+namespace OpenTibiaXna.OTServer.Engines
 {
-    public class Connection
+    public class ConnectionEngine
     {
         #region Variables
 
@@ -23,12 +25,13 @@ namespace OpenTibiaXna.OTServer.Objects
         uint[] xteaKey = new uint[4];
         bool remove = false;
         HashSet<uint> knownCreatures = new HashSet<uint>();
+        Queue<Direction> walkDirections;
 
         #endregion
 
         #region Constructor
 
-        public Connection(GameObject game)
+        public ConnectionEngine(GameObject game)
         {
             this.Game = game;
         }
@@ -37,7 +40,13 @@ namespace OpenTibiaXna.OTServer.Objects
 
         #region Properties
 
-        public PlayerObject Player { get; set; }
+        public Player Player { get; set; }
+
+        public PlayerObject PlayerObject 
+        { 
+            get { return Player.PlayerObject; }
+            set { Player.PlayerObject = value; }
+        }
 
         public GameObject Game { get; set; }
 
@@ -70,7 +79,7 @@ namespace OpenTibiaXna.OTServer.Objects
                 new AsyncCallback(ClientReadFirstCallBack), null);
         }
 
-        public void  GameListenerCallback(IAsyncResult ar)
+        public void GameListenerCallback(IAsyncResult ar)
         {
             TcpListener gameListener = (TcpListener)ar.AsyncState;
             socket = gameListener.EndAcceptSocket(ar);
@@ -213,7 +222,7 @@ namespace OpenTibiaXna.OTServer.Objects
                     ParsePlayerSpeech(message);
                     break;
                 case ClientPacketType.ChannelList:
-                    SendChannelList(Player);
+                    SendChannelList(PlayerObject);
                     break;
                 case ClientPacketType.ClientChannelOpen:
                     ParseClientChannelOpen(message);
@@ -228,21 +237,23 @@ namespace OpenTibiaXna.OTServer.Objects
                 //case ClientPacketType.ContainerClose:
                 //case ClientPacketType.ContainerOpenParent:
                 case ClientPacketType.TurnNorth:
-                    Game.CreatureTurn(Player, Direction.North);
+                    Game.CreatureTurn(PlayerObject, Direction.North);
                     break;
                 case ClientPacketType.TurnWest:
-                    Game.CreatureTurn(Player, Direction.East);
+                    Game.CreatureTurn(PlayerObject, Direction.East);
                     break;
                 case ClientPacketType.TurnSouth:
-                    Game.CreatureTurn(Player, Direction.South);
+                    Game.CreatureTurn(PlayerObject, Direction.South);
                     break;
                 case ClientPacketType.TurnEast:
-                    Game.CreatureTurn(Player, Direction.West);
+                    Game.CreatureTurn(PlayerObject, Direction.West);
                     break;
-                //case ClientPacketType.AutoWalk:
+                case ClientPacketType.AutoWalk:
+                    ParseAutoWalk(message);
+                    break;
                 case ClientPacketType.AutoWalkCancel:
-                    Game.WalkCancel(Player);
-                    break;                
+                    ParseAutoWalkCancel();
+                    break;                 
                 case ClientPacketType.VipAdd:
                     ParseVipAdd(message);
                     break;
@@ -267,33 +278,45 @@ namespace OpenTibiaXna.OTServer.Objects
                 //case ClientPacketType.NpcChannelClose:
                 //    break;
                 case ClientPacketType.MoveNorth:
-                    Game.CreatureMove(Player,  Direction.North);
+                    Game.CreatureMove(PlayerObject,  Direction.North);
                     break;
                 case ClientPacketType.MoveEast:
-                    Game.CreatureMove(Player,  Direction.East);
+                    Game.CreatureMove(PlayerObject,  Direction.East);
                     break;
                 case ClientPacketType.MoveSouth:
-                    Game.CreatureMove(Player,  Direction.South);
+                    Game.CreatureMove(PlayerObject,  Direction.South);
                     break;
                 case ClientPacketType.MoveWest:
-                    Game.CreatureMove(Player,  Direction.West);
+                    Game.CreatureMove(PlayerObject,  Direction.West);
                     break;
                 case ClientPacketType.MoveNorthEast:
-                    Game.CreatureMove(Player,  Direction.NorthEast);
+                    Game.CreatureMove(PlayerObject,  Direction.NorthEast);
                     break;
                 case ClientPacketType.MoveSouthEast:
-                    Game.CreatureMove(Player,  Direction.SouthEast);
+                    Game.CreatureMove(PlayerObject,  Direction.SouthEast);
                     break;
                 case ClientPacketType.MoveSouthWest:
-                    Game.CreatureMove(Player,  Direction.SouthWest);
+                    Game.CreatureMove(PlayerObject,  Direction.SouthWest);
                     break;
                 case ClientPacketType.MoveNorthWest:
-                    Game.CreatureMove(Player,  Direction.NorthWest);
+                    Game.CreatureMove(PlayerObject,  Direction.NorthWest);
                     break;
                 default:
-                    LoggingEngine.LogError(new LogErrorException("Unhandled packet from " + Player.ToString() + ": " + type));
+                    LoggingEngine.LogError(new LogErrorException("Unhandled packet from " + PlayerObject.ToString() + ": " + type));
                     break;
             }
+        }
+
+        public void ParseAutoWalk(NetworkMessageEngine message)
+        {
+            AutoWalkPacket packet = AutoWalkPacket.Parse(message);
+            walkDirections = packet.Directions;
+            DoAutoWalk();
+        }
+
+        public void ParseAutoWalkCancel()
+        {
+            Game.WalkCancel(PlayerObject);
         }
 
         public void ParseLogout()
@@ -305,57 +328,57 @@ namespace OpenTibiaXna.OTServer.Objects
         {
             PlayerSpeechPacket packet = PlayerSpeechPacket.Parse(message);
 
-            Game.CreatureSpeech(this.Player, packet.Speech);
+            Game.CreatureSpeech(this.PlayerObject, packet.Speech);
         }
 
         public void ParseClientChannelOpen(NetworkMessageEngine message)
         {
             ClientChannelOpenPacket packet = ClientChannelOpenPacket.Parse(message);
-            Game.ChannelOpen(Player, packet.Channel);
+            Game.ChannelOpen(PlayerObject, packet.Channel);
         }
 
         public void ParseChannelClose(NetworkMessageEngine message)
         {
             ChannelClosePacket packet = ChannelClosePacket.Parse(message);
-            Game.ChannelClose(Player, packet.Channel);
+            Game.ChannelClose(PlayerObject, packet.Channel);
         }
         
         public void ParseVipAdd(NetworkMessageEngine message)
         {
             VipAddPacket packet = VipAddPacket.Parse(message);
-            Game.VipAdd(Player, packet.Name);
+            Game.VipAdd(PlayerObject, packet.Name);
         }
 
         public void ParseVipRemove(NetworkMessageEngine message)
         {
             VipRemovePacket packet = VipRemovePacket.Parse(message);
-            Game.VipRemove(Player, packet.Id);
+            Game.VipRemove(PlayerObject, packet.Id);
         }
 
         public void ParseChangeOutfit(NetworkMessageEngine message)
         {
             ChangeOutfitPacket packet = ChangeOutfitPacket.Parse(message);
-            Game.PlayerChangeOutfit(Player, packet.Outfit);
+            Game.PlayerChangeOutfit(PlayerObject, packet.Outfit);
         }
 
         public void ParseFightModes(NetworkMessageEngine message)
         {
             FightModesPacket packet = FightModesPacket.Parse(message);
-            Player.FightMode = (FightModes)packet.FightMode;
-            Player.ChaseMode = packet.ChaseMode;
-            Player.SafeMode = packet.SafeMode;
+            PlayerObject.FightMode = (FightMode)packet.FightMode;
+            PlayerObject.ChaseMode = packet.ChaseMode;
+            PlayerObject.SafeMode = packet.SafeMode;
         }
 
         public void ParsePrivateChannelOpen(NetworkMessageEngine message)
         {
             PrivateChannelOpenPacket packet = PrivateChannelOpenPacket.Parse(message);
-            Game.PrivateChannelOpen(Player, packet.Receiver);
+            Game.PrivateChannelOpen(PlayerObject, packet.Receiver);
         }
 
         public void ParseLookAt(NetworkMessageEngine message)
         {
             LookAtPacket packet = LookAtPacket.Parse(message);
-            Game.PlayerLookAt(Player, packet.Id, packet.Location, packet.StackPosition);
+            Game.PlayerLookAt(PlayerObject, packet.Id, packet.Location, packet.StackPosition);
         }
         
         #endregion
@@ -397,20 +420,20 @@ namespace OpenTibiaXna.OTServer.Objects
 
             SelfAppearPacket.Add(
                 message,
-                Player.Id,
+                PlayerObject.Id,
                 true
             );
 
             MapDescriptionPacket.Add(
                 this,
                 message,
-                Player.Tile.Location
+                PlayerObject.Tile.Location
             );
 
             EffectPacket.Add(
                 message,
                 Effect.EnergyDamage,
-                Player.Tile.Location
+                PlayerObject.Tile.Location
             );
 
             // Inventory
@@ -424,7 +447,7 @@ namespace OpenTibiaXna.OTServer.Objects
 
             CreatureLightPacket.Add(
                 message,
-                Player.Id,
+                PlayerObject.Id,
                 LightLevel.None,
                 LightColor.None
             );
@@ -438,15 +461,15 @@ namespace OpenTibiaXna.OTServer.Objects
 
             PlayerStatusPacket.Add(
                 message,
-                Player.Health,
-                Player.MaxHealth,
-                Player.Capacity,
-                Player.Experience,
-                Player.Level,
+                PlayerObject.Health,
+                PlayerObject.MaxHealth,
+                PlayerObject.Capacity,
+                PlayerObject.Experience,
+                PlayerObject.Level,
                 0, // TODO: level system
-                Player.Mana,
-                Player.MaxMana,
-                Player.MagicLevel,
+                PlayerObject.Mana,
+                PlayerObject.MaxMana,
+                PlayerObject.MagicLevel,
                 0,
                 0,
                 0
@@ -469,7 +492,7 @@ namespace OpenTibiaXna.OTServer.Objects
             // TODO: put somewhere else, xml?
             List<OutfitObject> outfits;
 
-            if (Player.Gender == Gender.Male)
+            if (PlayerObject.Gender == Gender.Male)
             {
                 outfits = new List<OutfitObject>
                 {
@@ -533,7 +556,7 @@ namespace OpenTibiaXna.OTServer.Objects
             }
             OutfitWindowPacket.Add(
                 message,
-                Player,
+                PlayerObject,
                 outfits
             );
 
@@ -545,15 +568,15 @@ namespace OpenTibiaXna.OTServer.Objects
             NetworkMessageEngine outMessage = new NetworkMessageEngine();
             PlayerStatusPacket.Add(
                outMessage,
-                Player.Health,
-                Player.MaxHealth,
-                Player.Capacity,
-                Player.Experience,
-                Player.Level,
+                PlayerObject.Health,
+                PlayerObject.MaxHealth,
+                PlayerObject.Capacity,
+                PlayerObject.Experience,
+                PlayerObject.Level,
                 0, // TODO: level system
-                Player.Mana,
-                Player.MaxMana,
-                Player.MagicLevel,
+                PlayerObject.Mana,
+                PlayerObject.MaxMana,
+                PlayerObject.MagicLevel,
                 0,
                 0,
                 0
@@ -770,7 +793,7 @@ namespace OpenTibiaXna.OTServer.Objects
             NetworkMessageEngine message = new NetworkMessageEngine();
             PlayerWalkCancelPacket.Add(
                 message,
-                Player.Direction
+                PlayerObject.Direction
             );
             Send(message);
         }
@@ -897,6 +920,26 @@ namespace OpenTibiaXna.OTServer.Objects
             remove = true;
             stream.Close();
             socket.Close();
+        }
+
+        #endregion
+
+        #region Private
+
+        private void DoAutoWalk()
+        {
+            if (walkDirections.Count > 0)
+            {
+                Direction direction = walkDirections.Dequeue();
+                Game.CreatureMove(PlayerObject, direction);
+                if (walkDirections.Count > 0)
+                {
+                    Scheduler.AddTask(
+                        this.DoAutoWalk,
+                        null,
+                        (int)PlayerObject.GetStepDuration());
+                }
+            }
         }
 
         #endregion
