@@ -9,7 +9,7 @@ namespace OpenTibiaXna.OTServer.Packets.Server
 {
     public class MapDescriptionPacket : MapPacket
     {
-        public static void Add(Connection connection, NetworkMessageEngine message, LocationEngine playerLocation)
+        public static void Add(ConnectionEngine connection, NetworkMessageEngine message, LocationEngine playerLocation)
         {
             message.AddByte((byte)ServerPacketType.MapDescription);
             message.AddLocation(playerLocation);

@@ -22,13 +22,16 @@ namespace OpenTibiaXna.OTServer.Objects
             uint id = GetThingId();
             if ((id >= 0x0061) && (id <= 0x0063)) return 4;
 
-            DatItem di = DatReader.GetItem(id);
+            ItemInfo info = ItemInfo.GetItemInfo((ushort)id);
 
-            if (di.IsGroundTile) return 0;
-            else if (di.TopOrder1) return 1;
-            else if (di.TopOrder2) return 2;
-            else if (di.TopOrder3) return 3;
-            else return 5;
+            byte itemInfoTopOrder = 0;
+
+            if (info.IsAlwaysOnTop)
+                itemInfoTopOrder = info.TopOrder;
+            else
+                itemInfoTopOrder = 5;
+
+            return itemInfoTopOrder;
         }
     }
 }

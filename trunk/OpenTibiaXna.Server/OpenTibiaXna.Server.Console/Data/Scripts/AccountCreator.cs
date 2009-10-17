@@ -9,7 +9,7 @@ using OpenTibiaXna.OTServer.Engines;
 public class AccountCreator:IScript
 {
     GameObject game;
-    Dictionary<Connection, CreationInfo> creators = new Dictionary<Connection, CreationInfo>();
+    Dictionary<ConnectionEngine, CreationInfo> creators = new Dictionary<ConnectionEngine, CreationInfo>();
     public bool Start(GameObject game)
     {
         this.game = game;
@@ -62,7 +62,7 @@ public class AccountCreator:IScript
         return true;
     }
 
-    private void Parse(Connection connection,DialogueState state, SpeechObject speech)
+    private void Parse(ConnectionEngine connection,DialogueState state, SpeechObject speech)
     {
         switch (state)
         {

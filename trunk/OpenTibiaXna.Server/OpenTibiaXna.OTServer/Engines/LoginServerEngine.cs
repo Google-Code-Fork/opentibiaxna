@@ -31,7 +31,7 @@ namespace OpenTibiaXna.OTServer.Engines
             }
             catch (SocketException ex)
             {
-                if (ex.NativeErrorCode.Equals(10048)) // 10048 Port is already in use
+                if (ex.NativeErrorCode.Equals(10048)) // Error 10048: Port is already in use
                     LoggingEngine.LogError(new LogErrorException(String.Format("Login server is already running on {0} port.", this.LoginServerPort), ex));
             }
         }
@@ -52,7 +52,7 @@ namespace OpenTibiaXna.OTServer.Engines
 
         private void LoginListenerCallback(IAsyncResult ar)
         {
-            Connection connection = new Connection(ServerEngine.Game);
+            ConnectionEngine connection = new ConnectionEngine(ServerEngine.Game);
             connection.LoginListenerCallback(ar);
             ServerEngine.Connections.Add(connection);
 

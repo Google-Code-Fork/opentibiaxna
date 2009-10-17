@@ -6,19 +6,18 @@ using System.Data.Objects;
 using System.Data.Objects.DataClasses;
 using System.Data;
 using System.Collections;
+using System.Data.EntityClient;
 
 namespace OpenTibiaXna.OTServer.Entities
 {
     public class GenericDatabase
     {
-        // CurrentContext is set from: 
-        // OpenTibiaXna.OTServer.Engines.DatabaseEngine.SetDatabaseType() method.
         public static ObjectContext CurrentContext
         {
             get 
             {
                 if (fCurrentContext == null)
-                    throw new InvalidOperationException("Database context is null, you must call the OpenTibiaXna.OTServer.Engines.DatabaseEngine.SetDatabaseType() method first.");
+                    fCurrentContext = new OTXEntities();
 
                 return fCurrentContext;
             }
@@ -37,10 +36,23 @@ namespace OpenTibiaXna.OTServer.Entities
 
         public static void SaveOrUpdate(EntityObject entity)
         {
-            if (entity.EntityState == EntityState.Modified)
-                Update(entity);
-            else
-                Save(entity);
+            switch (entity.EntityState)
+            {
+                case EntityState.Added:
+                    Save(entity);
+                    break;
+                case EntityState.Deleted:
+                    break;
+                case EntityState.Detached:
+                    break;
+                case EntityState.Modified:
+                    Update(entity);
+                    break;
+                case EntityState.Unchanged:
+                    break;
+                default:
+                    break;
+            }
         }
 
         public static void Save(object entity)

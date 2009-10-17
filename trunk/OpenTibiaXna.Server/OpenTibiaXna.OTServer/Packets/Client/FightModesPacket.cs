@@ -9,7 +9,7 @@ namespace OpenTibiaXna.OTServer.Packets.Client
 {
     public class FightModesPacket : PacketObject
     {
-        public FightModes FightMode { get; set; }
+        public FightMode FightMode { get; set; }
         public bool ChaseMode { get; set; }
         public bool SafeMode { get; set; }
 
@@ -18,7 +18,7 @@ namespace OpenTibiaXna.OTServer.Packets.Client
         {
             FightModesPacket p = new FightModesPacket();
 
-            p.FightMode = (FightModes)msg.GetByte();
+            p.FightMode = (FightMode)msg.GetByte();
             p.ChaseMode =Convert.ToBoolean(msg.GetByte());
             p.SafeMode = Convert.ToBoolean(msg.GetByte());
 

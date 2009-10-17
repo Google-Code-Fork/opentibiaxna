@@ -8,7 +8,7 @@ namespace OpenTibiaXna.OTServer.Objects
 {
     public partial class PlayerObject : CreatureObject
     {
-        public Connection Connection { get; set; }
+        public ConnectionEngine Connection { get; set; }
         public Gender Gender { get; set; }
         public Vocation Vocation { get; set; }
         public ushort Level { get; set; }
@@ -18,7 +18,7 @@ namespace OpenTibiaXna.OTServer.Objects
         public LocationEngine SavedLocation { get; set; }
         public List<Channel> ChannelList { get; set; }
         public List<Channel> OpenedChannelList { get; set; }
-        public FightModes FightMode { get; set; }
+        public FightMode FightMode { get; set; }
         public bool ChaseMode { get; set; }
         public bool SafeMode { get; set; }
         public Dictionary<uint, VipObject> VipList { get; set; }

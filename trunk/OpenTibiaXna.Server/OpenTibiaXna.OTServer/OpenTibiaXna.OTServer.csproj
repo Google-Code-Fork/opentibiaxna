@@ -68,39 +68,30 @@
   <ItemGroup>
     <Compile Include="Engines\AccountEngine.cs" />
     <Compile Include="Engines\GameEngine.cs" />
+    <Compile Include="Helpers\Scheduler.cs" />
+    <Compile Include="ItemInfo.cs" />
     <Compile Include="Logging\Exceptions.cs" />
     <Compile Include="Logging\LoggingEngine.cs" />
     <Compile Include="Engines\LoginServerEngine.cs" />
     <Compile Include="Engines\ServerEngine.cs" />
     <Compile Include="Entities\MapItem.cs" />
-    <Compile Include="Entities\MSSQLEntities.Designer.cs">
+    <Compile Include="Entities\OTXEntities.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>MSSQLEntities.edmx</DependentUpon>
+      <DependentUpon>OTXEntities.edmx</DependentUpon>
     </Compile>
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Objects\Channel.cs" />
     <Compile Include="Objects\CharacterListItem.cs" />
-    <Compile Include="Objects\Connection.cs" />
+    <Compile Include="Engines\ConnectionEngine.cs" />
     <Compile Include="Objects\CreatureObject.cs" />
     <Compile Include="Database.cs" />
-    <Compile Include="Engines\DatabaseEngine.cs" />
     <Compile Include="DatItem.cs" />
     <Compile Include="DatReader.cs" />
     <Compile Include="Entities\Account.cs" />
     <Compile Include="Entities\GameWorld.cs" />
     <Compile Include="Entities\GenericDatabase.cs" />
-    <Compile Include="Entities\LiteSQLEntities.Designer.cs">
-      <DependentUpon>LiteSQLEntities.edmx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Entities\MapTile.cs" />
-    <Compile Include="Entities\MySQLEntities.Designer.cs">
-      <DependentUpon>MySQLEntities.edmx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Objects\MapObject.cs" />
     <Compile Include="Objects\PlayerObject.cs" />
     <Compile Include="Enums.cs" />
@@ -110,7 +101,6 @@
     <Compile Include="Helpers\Checksum\AdlerChecksum.cs" />
     <Compile Include="Helpers\Cryptography\Rsa.cs" />
     <Compile Include="Helpers\Cryptography\Xtea.cs" />
-    <Compile Include="Helpers\Enums\DatabaseTypes.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\Hash.cs" />
     <Compile Include="Helpers\ServerSettings\Settings.Designer.cs">
@@ -125,7 +115,15 @@
     <Compile Include="Engines\LocationEngine.cs" />
     <Compile Include="Engines\MapEngine.cs" />
     <Compile Include="Objects\OutfitObject.cs" />
+    <Compile Include="Objects\Town.cs" />
+    <Compile Include="OpenTibia\Constants.cs" />
+    <Compile Include="OpenTibia\FileLoader.cs" />
+    <Compile Include="OpenTibia\ItemsXmlReader.cs" />
+    <Compile Include="OpenTibia\OtbmReader.cs" />
+    <Compile Include="OpenTibia\OtbReader.cs" />
+    <Compile Include="OpenTibia\PropertyReader.cs" />
     <Compile Include="Packets\Client\AccountPacket.cs" />
+    <Compile Include="Packets\Client\AutoWalkPacket.cs" />
     <Compile Include="Packets\Client\ChangeOutfitPacket.cs" />
     <Compile Include="Packets\Client\ChannelClosePacket.cs" />
     <Compile Include="Packets\Client\ClientChannelOpenPacket.cs" />
@@ -169,8 +167,6 @@
     <Compile Include="Packets\Server\WorldLightPacket.cs" />
     <Compile Include="Engines\PlayerEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="LuaScripter\Script.cs" />
-    <Compile Include="LuaScripter\Scripter.cs" />
     <Compile Include="Scripting\IScript.cs" />
     <Compile Include="Scripting\ScriptManager.cs" />
     <Compile Include="Objects\SpeechObject.cs" />
@@ -179,33 +175,24 @@
     <Compile Include="Objects\VipObject.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="Entities\MySQLEntities.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>MySQLEntities.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
-    <EntityDeploy Include="Entities\LiteSQLEntities.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>LiteSQLEntities.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Helpers\ServerSettings\Settings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="Entities\MSSQLEntities.edmx">
+    <EntityDeploy Include="Entities\OTXEntities.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>MSSQLEntities.Designer.cs</LastGenOutput>
+      <LastGenOutput>OTXEntities.Designer.cs</LastGenOutput>
     </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.Config" />
     <None Include="Entities\Schemas\MSSQL.schema.sql" />
-    <None Include="Entities\Schemas\MySQL.schema.sql" />
-    <None Include="Entities\Schemas\SQLite.schema.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entities\Controllers\" />
+    <Folder Include="Helpers\Enums\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

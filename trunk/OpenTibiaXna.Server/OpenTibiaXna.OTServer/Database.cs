@@ -713,30 +713,27 @@ namespace OpenTibiaXna.OTServer
 
         public static void GetMapTiles(MapObject map)
         {
-            SQLiteDataReader reader = selectMapTilesCommand.ExecuteReader();
-            while (reader.Read())
+            foreach (MapTile mapTile in MapTile.GetAll())
             {
                 TileObject tile = new TileObject();
-                int x = reader.GetInt32(0) - 32000;
-                int y = reader.GetInt32(1) - 32000;
-                int z = reader.GetInt32(2);
-                tile.Ground = new ItemObject((ushort)reader.GetInt16(3));
+                int x = mapTile.X - 32000;
+                int y = mapTile.Y - 32000;
+                int z = mapTile.Z;
+                tile.Ground = new ItemObject((ushort)mapTile.GroundId);
                 LocationEngine location = new LocationEngine(x, y, z);
                 map.SetTile(location, tile);
             }
-            reader.Close();
         }
 
         public static void GetMapItems(MapObject map)
         {
-            SQLiteDataReader reader = selectMapItemsCommand.ExecuteReader();
-            while (reader.Read())
+            foreach (MapItem mapItem in MapItem.GetAll().OrderBy(o => o.StackPosition))
             {
-                int x = reader.GetInt32(0) - 32000;
-                int y = reader.GetInt32(1) - 32000;
-                int z = reader.GetInt32(2);
-                ushort id = (ushort)reader.GetInt16(4);
-                byte extra = reader.GetByte(5);
+                int x = mapItem.X - 32000;
+                int y = mapItem.Y - 32000;
+                int z = mapItem.Z;
+                ushort id = (ushort)mapItem.Id;
+                byte extra = (byte)mapItem.Extra;
 
                 TileObject tile = map.GetTile(x, y, z);
                 if (tile != null)
@@ -746,7 +743,6 @@ namespace OpenTibiaXna.OTServer
                     tile.Items.Add(item);
                 }
             }
-            reader.Close();
         }
 
         #endregion

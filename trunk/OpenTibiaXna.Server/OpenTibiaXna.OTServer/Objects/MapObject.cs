@@ -9,66 +9,53 @@ namespace OpenTibiaXna.OTServer.Objects
 {
     public class MapObject
     {
-        public const int Size = 1024;
+        public List<TownObject> Towns { get; private set; }
+        public string Description { get; set; }
+        public string SpawnFile { get; set; }
+        public string HouseFile { get; set; }
 
-        TileObject[, ,] tiles = new TileObject[Size, Size, 14];
+        Dictionary<LocationEngine, TileObject> tiles = new Dictionary<LocationEngine, TileObject>();
+        LocationEngine defaultLocation = new LocationEngine(32097, 32205, 7);
 
-        private void FillTiles(ushort id)
+        public MapObject()
         {
-            for (int x = 0; x < Size; x++)
-            {
-                for (int y = 0; y < Size; y++)
-                {
-                    TileObject tile = new TileObject();
-
-                    ItemObject ground = new ItemObject(id);
-                    tile.Ground = ground;
-
-                    tile.Location = new LocationEngine(x, y, 7);
-
-                    tiles[x, y, 7] = tile;
-                }
-            }
+            Towns = new List<TownObject>();
         }
 
         public void Load()
         {
-            // FillTiles(4526);
-            MapEngine.GetMapTiles(this);
-            //MapEngine.GetMapItems(this);
+            OpenTibia.OtbmReader reader = new OpenTibia.OtbmReader(@"Data\map.otbm");
+            reader.GetMapTiles(this);
+        }
+
+        public LocationEngine GetDefaultLocation()
+        {
+            return new LocationEngine(defaultLocation);
         }
 
         public TileObject GetTile(LocationEngine location)
         {
-            return GetTile(
-                location.X,
-                location.Y,
-                location.Z
-            );
+            if (tiles.ContainsKey(location))
+            {
+                return tiles[location];
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public TileObject GetTile(int x, int y, int z)
         {
-            if (x < 0 || x >= Size ||
-                y < 0 || y >= Size ||
-                z < 0 || z >= 14)
-            {
-                return null;
-            }
-
-            return tiles[x, y, z];
+            return GetTile(
+                new LocationEngine(x, y, z)
+            );
         }
 
         public bool SetTile(LocationEngine location, TileObject tile)
         {
-            if (location.X < 0 || location.X >= Size ||
-                location.Y < 0 || location.Y >= Size ||
-                location.Z < 0 || location.Z >= 14)
-            {
-                return false;
-            }
             tile.Location = location;
-            tiles[location.X, location.Y, location.Z] = tile;
+            tiles[location] = tile;
             return true;
         }
     }

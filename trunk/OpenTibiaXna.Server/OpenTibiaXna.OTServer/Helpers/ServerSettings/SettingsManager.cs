@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Collections.Specialized;
 using System.Configuration;
-using OpenTibiaXna.Helpers.Enums;
 using OpenTibiaXna.OTServer.Helpers.ServerSettings;
 
 namespace OpenTibiaXna.Helpers.ServerSettings
@@ -81,36 +80,9 @@ namespace OpenTibiaXna.Helpers.ServerSettings
         /// <returns>If no port is specified, 7172 is returned as default.</returns>
         public static int GetGameServerPort()
         {
-            int gameServerPort = GetValueAsInt(Settings.LoginServerPort);
+            int gameServerPort = GetValueAsInt(Settings.GameServerPort);
 
             return (gameServerPort == 0) ? gameServerPort : 7172;
-        }
-
-        public static DatabaseTypes GetDatabaseType()
-        {
-            string databaseTypeAsString = GetValueAsString(Settings.DatabaseType);
-            DatabaseTypes databaseType = DatabaseTypes.None;
-
-            switch (databaseTypeAsString.ToLower())
-            {
-                case "0":
-                case "mssql":
-                    databaseType = DatabaseTypes.MSSQL;
-                    break;
-                case "1":
-                case "mysql":
-                    databaseType = DatabaseTypes.MySQL;
-                    break;
-                case "2":
-                case "sqlite":
-                    databaseType = DatabaseTypes.SQLite;
-                    break;
-                default:
-                    databaseType = DatabaseTypes.None;
-                    break;
-            }
-
-            return databaseType;
         }
 
         public static string GetGameWorldName()

@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenTibiaXna.OTServer.Engines;
 using OpenTibiaXna.OTServer.Objects;
 using OpenTibiaXna.OTServer.Items;
-using OpenTibiaXna.OTServer.Engines;
 
 namespace OpenTibiaXna.OTServer.Packets.Server
 {
-    public class MapPacket : PacketObject
+    public class MapPacket
     {
-        public static void AddMapDescription(Connection connection, NetworkMessageEngine message, int x, int y, int z, ushort width, ushort height)
+        public static void AddMapDescription(ConnectionEngine connection, NetworkMessageEngine message, int x, int y, int z, ushort width, ushort height)
         {
             int MAP_MAX_LAYERS = 16;
             int skip = -1;
@@ -41,7 +41,7 @@ namespace OpenTibiaXna.OTServer.Packets.Server
             }
         }
 
-        public static int AddFloorDescription(Connection connection, NetworkMessageEngine message, int x, int y, int z, int width, int height, int offset, int skip)
+        public static int AddFloorDescription(ConnectionEngine connection, NetworkMessageEngine message, int x, int y, int z, int width, int height, int offset, int skip)
         {
             TileObject tile;
 
@@ -77,21 +77,21 @@ namespace OpenTibiaXna.OTServer.Packets.Server
             return skip;
         }
 
-        public static void AddTileDescription(Connection connection, NetworkMessageEngine message, TileObject tile)
+        public static void AddTileDescription(ConnectionEngine connection, NetworkMessageEngine message, TileObject tile)
         {
             if (tile != null)
             {
                 int count = 0;
                 if (tile.Ground != null)
                 {
-                    //AddItem(tile.Ground);
-                    message.AddUInt16(tile.Ground.Id);
-                    count++;
+                    message.AddItem(tile.Ground);
+                    ++count;
                 }
 
                 foreach (ItemObject item in tile.GetTopItems())
                 {
                     message.AddItem(item);
+                    ++count;
                 }
 
                 foreach (CreatureObject creature in tile.Creatures)
@@ -108,6 +108,7 @@ namespace OpenTibiaXna.OTServer.Packets.Server
                 foreach (ItemObject item in tile.GetDownItems())
                 {
                     message.AddItem(item);
+                    ++count;
                 }
             }
         }
